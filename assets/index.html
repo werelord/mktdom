@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+
+<head>
+    <style>
+        . {
+            font-family: serif;
+        }
+
+        .toplevel {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .planetContainer {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            background-color: dodgerblue;
+            padding: 3px;
+        }
+
+        .planetContainer>div {
+            border: 1px solid black;
+            background-color: #f1f1f1;
+        }
+
+        .fullPlanetDetails {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-evenly;
+        }
+
+        .fullPlanetDetails>div {
+            border: 1px solid black;
+            width: 50%;
+        }
+
+        .planetName {
+            display: flex;
+            flex-direction: column;
+            /* background-color: #f1f1f1; */
+            /* border: 1px solid black; */
+            /* width: 100%; */
+            padding: 3px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .planetDetails {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-evenly;
+            text-align: center;
+            /* background-color: #f1f1f1; */
+            /* border: 1px solid black; */
+            /* width: 50%; */
+            padding: 3px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .planetMarket {
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: space-evenly;
+            padding: 3px;
+            font-size: 14px;
+        }
+
+        .planetForm {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+
+        }
+
+        .button {
+            background-color: #04AA6D;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            /* text-align: center; */
+            /* text-decoration: none; */
+            /* display: inline-block; */
+            font-size: 16px;
+            /* width: wrap; */
+        }
+
+
+        .selected {
+            background-color: lightgreen !important;
+        }
+    </style>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+
+    <!-- <div id="sectorList" class="sectorContainer" data-tag="sectorList">
+            <div id="foo" onclick="switchSelected(this)">foo</div>
+            <div id="bar1" onclick="switchSelected(this)">bar</div>
+            <div onclick="switchSelected(this)">bar</div>
+            <div onclick="switchSelected(this)">bar</div>
+        </div> -->
+    <div class="toplevel">
+        <div id="planetList" class="planetContainer" data-tag="planetList">
+            <div class="fullPlanetDetails">
+                <div onclick="switchSelected(this)">
+                    <div class="planetName">foo</div>
+                    <div class="planetDetails">
+                        <div>sector 1</div>
+                        <div>market vol: 53,255</div>
+                        <div>market share: 47%</div>
+                        <div>points:13</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>transport bot 3</div>
+                    <div>miner robot 11</div>
+                    <div>transport bot 3</div>
+                    <div>miner robot 11</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails">
+                <div onclick="switchSelected(this)">
+                    <div class="planetName">foo</div>
+                    <div class="planetDetails">
+                        <div>sector 1</div>
+                        <div>market vol: 53,255</div>
+                        <div>market share: 47%</div>
+                        <div>points:13</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>transport bot 3</div>
+                    <div>miner robot 11</div>
+                    <div>transport bot 3</div>
+                    <div>miner robot 11</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails">
+                <div onclick="switchSelected(this)">
+                    <div class="planetName">foo</div>
+                    <div class="planetDetails">
+                        <div>sector 1</div>
+                        <div>market vol: 53,255</div>
+                        <div>market share: 47%</div>
+                        <div>points:13</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>transport bot 3</div>
+                    <div>miner robot 11</div>
+                    <div>transport bot 3</div>
+                    <div>miner robot 11</div>
+                </div>
+            </div>
+
+
+        </div>
+        <form id="planetform" class="planetForm" onsubmit="addPlanet()">
+            <label for="planet">Planet</label>
+            <input type="text" id="planet">
+            <input id="addplanet" type="submit" class="button" value="Add Planet" onClick="addPlanet()"></button>
+        </form>
+    </div>
+    <div id="error">
+    </div>
+    <!-- <ul data-tag="sectorList">
+            <li onclick="switchSelected(this)">foo</li>
+            <li onclick="switchSelected(this)">bar</li>
+        </ul><br> -->
+    <!-- <textarea id="jsoninput" name="jsoninput" cols="80" rows="20"></textarea><br>
+        <input id="button" type="submit" name="button" value="pretty json" onclick="json(jsoninput.value)"/>
+        <textarea id="jsonoutput" name="jsonoutput" cols="80" rows="20"></textarea> -->
+    <script src="wasm_exec.js"></script>
+    <script>
+        const go = new Go();
+        WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+            inst = result.instance;
+            go.run(result.instance);
+            // console.log(inst.exports.loadData(3, 4));
+            var result = goLoadData()
+            if ((result != null) && ('error' in result)) {
+                handleErr(result)
+            }
+        }).catch((err) => {
+            console.error(err)
+        });
+        console.log("wasm init")
+
+        function addPlanet() {
+            var result = goAddPlanet()
+            if ((result != null) && ('error' in result)) {
+                handleErr(result)
+            }
+        }
+
+        // var json = function(input) {
+        //     var result = formatJSON(input)
+        //     if (( result != null) && ('error' in result)) {
+        //         console.log("Go return value", result)
+        //         jsonoutput.value = ""
+        //         alert(result.error)
+        //     }
+        // }
+        function switchSelected(el) {
+            // console.log("element:" + el)
+            // console.log("children:", el.parentElement.children)
+            // find all the elements in your channel list and loop over them
+            //Array.prototype.slice.call(document.querySelectorAll('div[data-tag="' + parentTag + '"] div')).forEach(function(element){
+            if (el.classList.contains("selected")) {
+                el.classList.remove('selected')
+            } else {
+                Array.prototype.slice.call(document.querySelectorAll('div[data-tag="planetList"] div')).forEach(function (element) {
+                    // remove the selected clas
+                    element.classList.remove('selected');
+                });
+                // add the selected class to the element that was clicked
+                el.classList.add('selected');
+            }
+
+            // todo: update subsequent divs
+
+        }
+        function handleErr(err) {
+            console.log("error encocuntered:", err)
+        }
+    </script>
+</body>
+
+</html>
