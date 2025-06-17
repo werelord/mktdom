@@ -24,6 +24,9 @@ func main() {
 	js.Global().Set("goAddPlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
 		return addPlanet()
 	}))
+	js.Global().Set("goGenPlanetForm", js.FuncOf(func(this js.Value, args []js.Value) any {
+		return genPlanetForm()
+	}))
 
 	<-make(chan struct{})
 }
@@ -107,19 +110,20 @@ func displayPlanetList() any {
 		planet := planetList[pk]
 
 		fullPlanetDiv := doc.CreateElement("div")
-		fullPlanetDiv.SetAttribute("class", "fullPlanetDetails")
+		fullPlanetDiv.Class().SetString("fullPlanetDetails")
+		fullPlanetDiv.SetAttribute("onClick", "switchSelected(this)")
 
 		planetWrapperDiv := doc.CreateElement("div")
-		planetWrapperDiv.SetAttribute("onClick", "switchSelected(this)")
+		// planetWrapperDiv.SetAttribute("onClick", "switchSelected(this)")
 		fullPlanetDiv.AppendChild(planetWrapperDiv)
 
 		nameDiv := doc.CreateElement("div")
-		nameDiv.SetAttribute("class", "planetName")
+		nameDiv.Class().SetString("planetName")
 		nameDiv.SetInnerHTML(planet.name)
 		planetWrapperDiv.AppendChild(nameDiv)
 
 		detailsDiv := doc.CreateElement("div")
-		detailsDiv.SetAttribute("class", "planetDetails")
+		detailsDiv.Class().SetString("planetDetails")
 		planetWrapperDiv.AppendChild(detailsDiv)
 
 		sectorDiv := doc.CreateElement("div")
@@ -136,7 +140,7 @@ func displayPlanetList() any {
 		detailsDiv.AppendChild(marketShareDiv)
 
 		marketDiv := doc.CreateElement("div")
-		marketDiv.SetAttribute("class", "planetMarket")
+		marketDiv.Class().SetString("planetMarket")
 		fullPlanetDiv.AppendChild(marketDiv)
 
 		for _, prod := range planet.productList {
@@ -151,15 +155,41 @@ func displayPlanetList() any {
 }
 
 func genPlanetForm() any {
+	fmt.Println("in genPlanetForm()")
 	// return nil
 	doc := dom.GetWindow().Document()
 	table := doc.GetElementByID("addPlanetTable")
+
+	// reset everything
+	for _, child := range table.ChildNodes() {
+		// fmt.Printf("child %v - %v\n", child.NodeName(), child.NodeValue())
+		table.RemoveChild(child)
+	}
+
+	// add spacer row
+	hiddenrow := doc.CreateElement("tr")
+	hiddenrow.Class().SetString("hidden")
+	spacer1 := doc.CreateElement("td")
+	spacer2 := doc.CreateElement("td")
+	spacer1.SetInnerHTML("0000")
+	spacer2.SetInnerHTML("0000")
+
+	hiddenrow.AppendChild(doc.CreateElement("td"))
+	hiddenrow.AppendChild(doc.CreateElement("td"))
+	hiddenrow.AppendChild(spacer1)
+	hiddenrow.AppendChild(doc.CreateElement("td"))
+	hiddenrow.AppendChild(doc.CreateElement("td"))
+	hiddenrow.AppendChild(doc.CreateElement("td"))
+	hiddenrow.AppendChild(spacer2)
+	hiddenrow.AppendChild(doc.CreateElement("td"))
+
+	table.AppendChild(hiddenrow)
 
 	var genProdTd = func(r dom.Element, p productType) {
 		// var tdlist = make([]dom.Element, 0)
 
 		label := doc.CreateElement("td")
-		label.SetAttribute("class", "productLabel")
+		label.Class().SetString("productLabel")
 		// label.SetAttribute("id", fmt.Sprintf("%v", spToUl(p.ID())))
 		// fmt.Println("in genPlanetForm, " + p.name)
 		label.SetInnerHTML(p.name)
@@ -167,22 +197,22 @@ func genPlanetForm() any {
 
 		mbntd := doc.CreateElement("td")
 		minus := doc.CreateElement("button")
-		minus.SetAttribute("class", "productButton")
-		minus.SetAttribute("onsubmit", "return false;")
+		minus.Class().SetString("productButton")
+		minus.SetAttribute("onclick", fmt.Sprintf("subAmount('%v_amt')", p.ID()))
 		minus.SetInnerHTML("-")
 		mbntd.AppendChild(minus)
 		r.AppendChild(mbntd)
 
 		amt := doc.CreateElement("td")
-		amt.SetAttribute("class", "productAmount")
-		amt.SetAttribute("id", fmt.Sprintf("%v_amt", p.ID()))
+		amt.Class().SetString("productAmount")
+		amt.SetID(fmt.Sprintf("%v_amt", p.ID()))
 		amt.SetInnerHTML(fmt.Sprintf("%v", 0))
 		r.AppendChild(amt)
 
 		pbntd := doc.CreateElement("td")
 		plus := doc.CreateElement("button")
-		plus.SetAttribute("class", "productButton")
-		plus.SetAttribute("onsubmit", "return false;")
+		plus.Class().SetString("productButton")
+		plus.SetAttribute("onclick", fmt.Sprintf("addAmount('%v_amt')", p.ID()))
 		plus.SetInnerHTML("+")
 		pbntd.AppendChild(plus)
 		r.AppendChild(pbntd)

@@ -2,182 +2,20 @@
 <html>
 
 <head>
-    <style>
-        . {
-            font-family: serif;
-        }
-
-        .toplevel {
-            display: flex;
-            flex-direction: row;
-        }
-
-        .planetContainer {
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-            background-color: dodgerblue;
-            padding: 3px;
-        }
-
-        .planetContainer>div {
-            border: 1px solid black;
-            background-color: #f1f1f1;
-        }
-
-        .fullPlanetDetails {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: space-evenly;
-        }
-
-        .fullPlanetDetails>div {
-            border: 1px solid black;
-            width: 50%;
-        }
-
-        .planetName {
-            display: flex;
-            flex-direction: column;
-            /* background-color: #f1f1f1; */
-            /* border: 1px solid black; */
-            /* width: 100%; */
-            padding: 3px;
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .planetDetails {
-            display: grid;
-            grid-template-columns: auto auto;
-            /* flex-direction: row;
-            flex-wrap: nowrap; */
-            justify-content: space-evenly;
-            text-align: center;
-            /* background-color: #f1f1f1; */
-            /* border: 1px solid black; */
-            /* width: 50%; */
-            padding: 3px;
-            font-size: 12px;
-            text-align: center;
-        }
-
-        .planetMarket {
-            display: grid;
-            grid-template-columns: auto auto;
-            justify-content: space-evenly;
-            padding: 3px;
-            font-size: 14px;
-        }
-
-        .addPlanetForm {
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-            margin-left: 15px;
-            /* border: 1px solid black; */
-        }
-        .addPlanetFormRow {
-            display: flex;
-            flex-direction: row;
-            border: 1px solid black;
-        }
-
-        /* table {
-            table-layout:calc();
-            width: 80%;
-        } */
-
-        td {
-            border: 1px solid black;
-            padding-left: 10px;
-                /* overflow-x: hidden;
-    overflow-y: hidden;
-    white-space: nowrap;
-    max-width: 30px; */
-        }
-
-        label {
-            font-size: 16px;
-            width: 10%;
-            /* text-align: center; */
-            padding: 15px 5px;
-            /* border: 3px solid green; */
-            text-align: right;
-        }
-        input[type=text] {
-            width: 75%;
-            padding: 12px 20px;
-            box-sizing: border-box;
-            border: 2px solid #ccc;
-            font-size: 16px;
-            /* border: 3px solid #555; */
-        }
-        input[type=text]:focus {
-            /* width: 75% */
-            border: 2px solid #555;
-        }
-        .productLabel {
-            /* padding: 10px; */
-            width: 50%;
-            margin: 15px;
-            text-align: right;
-            font-size: 14px;
-        }
-        .productAmount {
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            /* width: 20px; */
-        }
-
-        .addPlanetButton {
-            background-color: #04AA6D;
-            /* Green */
-            border: none;
-            color: white;
-            padding: 16px;
-            /* width: 50%; */
-            /* text-align: center; */
-            /* text-decoration: none; */
-            /* display: inline-block; */
-            font-size: 16px;
-            /* width: wrap; */
-        }
-        .productButton {
-            background-color: #04AA6D;
-            border: 1px solid black;
-            /* color:white; */
-            /* padding: 10px; */
-            width: 18px;
-            /* height: 20px; */
-            font-size: 12px;
-            text-align: center;
-        }
-       
-        .selected {
-            background-color: lightgreen !important;
-        }
-
-        .hidden {
-            visibility: hidden;
-        }
-    </style>
+    <link rel="stylesheet" href="css/planetlist.css">
+    <link rel="stylesheet" href="css/addplanetform.css">
     <meta charset="utf-8" />
 </head>
 
 <body>
 
-    <!-- <div id="sectorList" class="sectorContainer" data-tag="sectorList">
-            <div id="foo" onclick="switchSelected(this)">foo</div>
-            <div id="bar1" onclick="switchSelected(this)">bar</div>
-            <div onclick="switchSelected(this)">bar</div>
-            <div onclick="switchSelected(this)">bar</div>
-        </div> -->
+    <div class="navMenu">
+        <button class="addPlanetButton" value="Add Planet" onclick="showAddPlanet()">Add Planet</button>
+    </div>
+    <div id="errorText" class="errorText"></div>
     <div class="toplevel">
         <div id="planetList" class="planetContainer" data-tag="planetList">
-            <div class="fullPlanetDetails">
+            <!-- <div class="fullPlanetDetails">
                 <div onclick="switchSelected(this)">
                     <div class="planetName">foo</div>
                     <div class="planetDetails">
@@ -231,22 +69,27 @@
                     <div>transport bot 3</div>
                     <div>miner robot 11</div>
                 </div>
-            </div>
-
-
+            </div> -->
         </div>
-        <div id="addPlanetForm" class="addPlanetForm">
+
+        <div id="addPlanetForm" class="addPlanetForm hidden">
             <div class="addPlanetFormRow">
                 <label for="planet">Planet:</label>
-                <input type="text" id="planet">
+                <input type="text" id="addPlanetName">
             </div>
             <div class="addPlanetFormRow">
                 <label for="sector">Sector:</label>
-                <input type="text" id="sector">
+                <input type="text" id="addPlanetSector">
             </div>
+            <!-- <div class="addPlanetFormRow">
+                <div class="planetMarket">
+                    <div style="padding-left: 30px;">Calculated Market Volume:</div>
+                    <div id="addPlanetMarketVolume" style="padding-left: 5px;">0</div>
+                </div>
+            </div> -->
             <div class="addPlanetFormRow">
                 <table id="addPlanetTable">
-                    <tr class="hidden"> <!-- for spacing purposes-->
+                    <!-- <tr class="hidden"> 
                         <td></td>
                         <td></td>
                         <td>0000</td>
@@ -258,42 +101,39 @@
                     </tr>
                     <tr>
                         <td class="productLabel" id="transport_bot">Transport Bot:</td>
-                        <td><button class="productButton" onsubmit="return false;">-</button></td>
+                        <td><button class="productButton" onclick="subAmount('transport_bot_amt');">-</button></td>
                         <td class="productAmount" id="transport_bot_amt">0</td>
                         <td><button class="productButton" onclick="addAmount('transport_bot_amt');">+</button></td>
                         <td class="productLabel" id="transport_bot">Heavy Duty Transport Bot:</td>
-                        <td><button class="productButton" onsubmit="return false;">-</button></td>
-                        <td class="productAmount" id="transport_bot_amt">0</td>
-                        <td><button class="productButton" onsubmit="return false;">+</button></td>
+                        <td><button class="productButton" onclick="subAmount('heavy_duty_transport_bot_amt');">-</button></td>
+                        <td class="productAmount" id="heavy_duty_transport_bot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('heavy_duty_transport_bot_amt');">+</button></td>
                     </tr>
                     <tr>
                         <td class="productLabel" id="transport_bot">Heavy Duty Transport Bot:</td>
-                        <td><button class="productButton" onsubmit="return false;">-</button></td>
+                        <td><button class="productButton" onclick="return false;">-</button></td>
                         <td class="productAmount" id="transport_bot_amt">0</td>
-                        <td><button class="productButton" onsubmit="return false;">+</button></td>
+                        <td><button class="productButton" onclick="return false;">+</button></td>
                         <td class="productLabel" id="transport_bot">Transport Bot:</td>
-                        <td><button class="productButton" onsubmit="return false;">-</button></td>
+                        <td><button class="productButton" onclick="return false;">-</button></td>
                         <td class="productAmount" id="transport_bot_amt">0</td>
-                        <td><button class="productButton" onsubmit="return false;">+</button></td>
-                    </tr>
+                        <td><button class="productButton" onclick="return false;">+</button></td>
+                    </tr> -->
                 </table>
             </div>
             <div class="addPlanetFormRow">
                 <label></label>
-                <button id="addplanet" class="addPlanetButton" value="Add Planet" onsubmit="addPlanet();">Add Planet</button>
+                <button class="addPlanetButton" onclick="addPlanet();">Add Planet</button>
+                <label></label>
+                <button class="addPlanetButton" onclick="cancelAddPlanet();" style="background-color: red;">Cancel</button>
             </div>
         </div>
     </div>
     <div id="error">
     </div>
-    <!-- <ul data-tag="sectorList">
-            <li onclick="switchSelected(this)">foo</li>
-            <li onclick="switchSelected(this)">bar</li>
-        </ul><br> -->
-    <!-- <textarea id="jsoninput" name="jsoninput" cols="80" rows="20"></textarea><br>
-        <input id="button" type="submit" name="button" value="pretty json" onclick="json(jsoninput.value)"/>
-        <textarea id="jsonoutput" name="jsonoutput" cols="80" rows="20"></textarea> -->
+
     <script src="wasm_exec.js"></script>
+    <script src="js/script.js"></script>
     <script>
         const go = new Go();
         WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
@@ -309,50 +149,7 @@
         });
         console.log("wasm init")
 
-        function addPlanet() {
-            console.log("in add planet")
-            var result = goAddPlanet()
-            if ((result != null) && ('error' in result)) {
-                handleErr(result)
-            }
-        }
 
-        function addAmount(el) {
-            console.log(el)
-            var e = document.getElementById(el)
-            e.innerHTML = +e.innerHTML + 48
-        }
-
-        // var json = function(input) {
-        //     var result = formatJSON(input)
-        //     if (( result != null) && ('error' in result)) {
-        //         console.log("Go return value", result)
-        //         jsonoutput.value = ""
-        //         alert(result.error)
-        //     }
-        // }
-        function switchSelected(el) {
-            // console.log("element:" + el)
-            // console.log("children:", el.parentElement.children)
-            // find all the elements in your channel list and loop over them
-            //Array.prototype.slice.call(document.querySelectorAll('div[data-tag="' + parentTag + '"] div')).forEach(function(element){
-            if (el.classList.contains("selected")) {
-                el.classList.remove('selected')
-            } else {
-                Array.prototype.slice.call(document.querySelectorAll('div[data-tag="planetList"] div')).forEach(function (element) {
-                    // remove the selected clas
-                    element.classList.remove('selected');
-                });
-                // add the selected class to the element that was clicked
-                el.classList.add('selected');
-            }
-
-            // todo: update subsequent divs
-
-        }
-        function handleErr(err) {
-            console.log("error encocuntered:", err)
-        }
     </script>
 </body>
 

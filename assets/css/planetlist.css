@@ -1,0 +1,74 @@
+. {
+    font-family: serif;
+}
+
+.errorText {
+    font-size: 20px;
+    color: red;
+    text-align: center;
+}
+
+.toplevel {
+    display: flex;
+    flex-direction: row;
+    padding-top: 20px;
+}
+
+.planetContainer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    background-color: dodgerblue;
+    padding: 3px;
+}
+
+.planetContainer>div {
+    border: 1px solid black;
+    background-color: #f1f1f1;
+}
+
+.fullPlanetDetails {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+}
+
+.fullPlanetDetails>div {
+    border: 1px solid black;
+    width: 50%;
+}
+
+.planetName {
+    display: flex;
+    flex-direction: column;
+    /* background-color: #f1f1f1; */
+    /* border: 1px solid black; */
+    /* width: 100%; */
+    padding: 3px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.planetDetails {
+    display: grid;
+    grid-template-columns: auto auto;
+    /* flex-direction: row;
+    flex-wrap: nowrap; */
+    justify-content: space-evenly;
+    text-align: center;
+    /* background-color: #f1f1f1; */
+    /* border: 1px solid black; */
+    /* width: 50%; */
+    padding: 3px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.planetMarket {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-evenly;
+    padding: 3px;
+    font-size: 14px;
+}

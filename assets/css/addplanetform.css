@@ -1,0 +1,95 @@
+.addPlanetForm {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin-left: 15px;
+    /* border: 1px solid black; */
+}
+.addPlanetFormRow {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+}
+
+/* table {
+    table-layout:calc();
+    width: 80%;
+} */
+
+td {
+    border: 1px solid black;
+    padding-left: 10px;
+        /* overflow-x: hidden;
+overflow-y: hidden;
+white-space: nowrap;
+max-width: 30px; */
+}
+
+label {
+    font-size: 16px;
+    width: 10%;
+    /* text-align: center; */
+    padding: 15px 5px;
+    /* border: 3px solid green; */
+    text-align: right;
+}
+input[type=text] {
+    width: 75%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    /* border: 3px solid #555; */
+}
+input[type=text]:focus {
+    /* width: 75% */
+    border: 2px solid #555;
+}
+.productLabel {
+    /* padding: 10px; */
+    width: 50%;
+    margin: 15px;
+    text-align: right;
+    font-size: 14px;
+}
+.productAmount {
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    /* width: 20px; */
+}
+
+.addPlanetButton {
+    background-color: #04AA6D;
+    /* Green */
+    border: none;
+    color: white;
+    padding: 16px;
+    /* width: 50%; */
+    /* text-align: center; */
+    /* text-decoration: none; */
+    /* display: inline-block; */
+    font-size: 16px;
+    /* width: wrap; */
+}
+.productButton {
+    width:20px;
+    height:20px;
+    background:#f2f2f2;
+    border-radius:4px;
+    padding:1px 5px 8px 4px;
+    border:1px solid #ddd;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+}
+
+
+
+.selected {
+    background-color: lightgreen !important;
+}
+
+.hidden {
+    visibility: hidden;
+}
