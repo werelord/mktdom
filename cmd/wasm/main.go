@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"sort"
+	"strconv"
 	"strings"
 	"syscall/js"
 
@@ -14,7 +16,7 @@ func main() {
 	// js.Global().Set("formatJSON", jsonWrapper())
 	js.Global().Set("goLoadData", js.FuncOf(func(this js.Value, args []js.Value) any {
 		loadStoredPlanetData()
-		displayPlanetList()
+		loadPlanetDisplay()
 		genPlanetForm()
 		return loadData()
 	}))
@@ -36,52 +38,12 @@ func loadStoredPlanetData() {
 	temploadStoredPlanetData()
 }
 
-// func prettyJson(input string) (string, error) {
-// 	var raw any
-// 	if err := json.Unmarshal([]byte(input), &raw); err != nil {
-// 		return "", err
-// 	}
-// 	pretty, err := json.MarshalIndent(raw, "", "  ")
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	return string(pretty), nil
-// }
-
-// func jsonWrapper() js.Func {
-// 	jsonFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
-// 		if len(args) != 1 {
-// 			return sendErr("Invalid no of arguments passed")
-// 		}
-
-// 		jsDoc := js.Global().Get("document")
-// 		if !jsDoc.Truthy() {
-// 			return sendErr("unable to get document object")
-// 		}
-// 		jsonOutputTextArea := jsDoc.Call("getElementById", "jsonoutput")
-// 		if !jsonOutputTextArea.Truthy() {
-// 			return sendErr("unable to get output text area")
-// 		}
-// 		inputJSON := args[0].String()
-// 		fmt.Printf("input %s\n", inputJSON)
-// 		pretty, err := prettyJson(inputJSON)
-// 		if err != nil {
-// 			errStr := fmt.Sprintf("unable to convert to json %s\n", err)
-// 			return sendErr(errStr)
-// 		}
-// 		jsonOutputTextArea.Set("value", pretty)
-// 		js.Global().Get("localStorage").Call("setItem", "foo", pretty)
-// 		return nil
-// 	})
-// 	return jsonFunc
-// }
-
 func loadData() any {
 	// todo: populate
 	fmt.Println("in loadData")
 	// loadSectorList()
-	return sendErr("testing")
-	// return nil
+	// return sendErr("testing")
+	return nil
 }
 
 func sendErr(val string) map[string]any {
@@ -91,67 +53,79 @@ func sendErr(val string) map[string]any {
 	return res
 }
 
-func displayPlanetList() any {
+func loadPlanetDisplay() any {
+
 	doc := dom.GetWindow().Document()
-	el := doc.GetElementByID("planetList")
+	planetListDiv := doc.GetElementByID("planetList")
 	// fmt.Printf("full planet list: %v\n", el.Class())
-	for _, child := range el.ChildNodes() {
+	for _, child := range planetListDiv.ChildNodes() {
 		// fmt.Printf("child %v - %v\n", child.NodeName(), child.NodeValue())
-		el.RemoveChild(child)
+		planetListDiv.RemoveChild(child)
 	}
 
-	planetkeys := make([]string, 0, len(planetList))
-	for k := range planetList {
-		planetkeys = append(planetkeys, k)
+	planetDisplay = make([]*planet, 0, len(planetMap))
+	for _, p := range planetMap {
+		fmt.Println("formap:" + p.Name)
+		planetDisplay = append(planetDisplay, p)
 	}
-	sort.Strings(planetkeys)
+	sort.Slice(planetDisplay, func(i, j int) bool {
+		return planetDisplay[i].Name < planetDisplay[j].Name
+	})
 
-	for _, pk := range planetkeys {
-		planet := planetList[pk]
-
-		fullPlanetDiv := doc.CreateElement("div")
-		fullPlanetDiv.Class().SetString("fullPlanetDetails")
-		fullPlanetDiv.SetAttribute("onClick", "switchSelected(this)")
-
-		planetWrapperDiv := doc.CreateElement("div")
-		// planetWrapperDiv.SetAttribute("onClick", "switchSelected(this)")
-		fullPlanetDiv.AppendChild(planetWrapperDiv)
-
-		nameDiv := doc.CreateElement("div")
-		nameDiv.Class().SetString("planetName")
-		nameDiv.SetInnerHTML(planet.name)
-		planetWrapperDiv.AppendChild(nameDiv)
-
-		detailsDiv := doc.CreateElement("div")
-		detailsDiv.Class().SetString("planetDetails")
-		planetWrapperDiv.AppendChild(detailsDiv)
-
-		sectorDiv := doc.CreateElement("div")
-		sectorDiv.SetInnerHTML(fmt.Sprintf("sector %v", planet.sector))
-		marketVolDiv := doc.CreateElement("div")
-		marketVolDiv.SetInnerHTML(fmt.Sprintf("market cap: %v", planet.marketVolume))
-		marketShareDiv := doc.CreateElement("div")
-		marketShareDiv.SetInnerHTML(fmt.Sprintf("market share: %.2f%%", planet.marketShare))
-		pointsDiv := doc.CreateElement("div")
-		pointsDiv.SetInnerHTML(fmt.Sprintf("points: %v", planet.domPoints))
-		detailsDiv.AppendChild(sectorDiv)
-		detailsDiv.AppendChild(marketVolDiv)
-		detailsDiv.AppendChild(pointsDiv)
-		detailsDiv.AppendChild(marketShareDiv)
-
-		marketDiv := doc.CreateElement("div")
-		marketDiv.Class().SetString("planetMarket")
-		fullPlanetDiv.AppendChild(marketDiv)
-
-		for _, prod := range planet.productList {
-			prodDiv := doc.CreateElement("div")
-			prodDiv.SetInnerHTML(fmt.Sprintf("%v: %v/%v", prod.name, prod.Supply, prod.Demand))
-			marketDiv.AppendChild(prodDiv)
-		}
-
-		el.AppendChild(fullPlanetDiv)
+	for _, planet := range planetDisplay {
+		fullPlanetDiv := generatePlanetDisplay(*planet)
+		planetListDiv.AppendChild(fullPlanetDiv)
 	}
 	return nil
+}
+
+func generatePlanetDisplay(p planet) dom.Element {
+
+	doc := dom.GetWindow().Document()
+
+	// full planet wrapper
+	fullPlanetDiv := doc.CreateElement("div")
+	fullPlanetDiv.SetID(p.Name)
+	fullPlanetDiv.Class().SetString("fullPlanetDetails")
+	fullPlanetDiv.SetAttribute("onClick", "switchSelected(this)")
+
+	planetWrapperDiv := doc.CreateElement("div")
+	// planetWrapperDiv.SetAttribute("onClick", "switchSelected(this)")
+	fullPlanetDiv.AppendChild(planetWrapperDiv)
+
+	nameDiv := doc.CreateElement("div")
+	nameDiv.Class().SetString("planetName")
+	nameDiv.SetInnerHTML(p.Name)
+	planetWrapperDiv.AppendChild(nameDiv)
+
+	detailsDiv := doc.CreateElement("div")
+	detailsDiv.Class().SetString("planetDetails")
+	planetWrapperDiv.AppendChild(detailsDiv)
+
+	sectorDiv := doc.CreateElement("div")
+	sectorDiv.SetInnerHTML(fmt.Sprintf("sector %v", p.Sector))
+	marketVolDiv := doc.CreateElement("div")
+	marketVolDiv.SetInnerHTML(fmt.Sprintf("market cap: %v", p.market.total))
+	marketShareDiv := doc.CreateElement("div")
+	marketShareDiv.SetInnerHTML(fmt.Sprintf("market share: %.2f%%", (float32(p.market.current) / float32(p.market.total))))
+	pointsDiv := doc.CreateElement("div")
+	pointsDiv.SetInnerHTML(fmt.Sprintf("points: %v", p.DomPoints))
+	detailsDiv.AppendChild(sectorDiv)
+	detailsDiv.AppendChild(marketVolDiv)
+	detailsDiv.AppendChild(pointsDiv)
+	detailsDiv.AppendChild(marketShareDiv)
+
+	marketDiv := doc.CreateElement("div")
+	marketDiv.Class().SetString("planetMarket")
+	fullPlanetDiv.AppendChild(marketDiv)
+
+	for _, prod := range p.ProductList {
+		prodDiv := doc.CreateElement("div")
+		prodDiv.SetInnerHTML(fmt.Sprintf("%v: %v/%v", prod.name, prod.Supply, prod.Demand))
+		marketDiv.AppendChild(prodDiv)
+	}
+
+	return fullPlanetDiv
 }
 
 func genPlanetForm() any {
@@ -236,17 +210,139 @@ func genPlanetForm() any {
 }
 
 func onSectorSelect() any {
+
 	return sendErr("not yet implemented")
 }
 func addPlanet() any {
-	return sendErr("not yet implemented")
-}
-func (p planet) calcMarketCap() int {
-	fmt.Println("not yet implemented")
-	return 0
+
+	doc := dom.GetWindow().Document()
+	var newPlanet planet
+	newPlanet.ProductList = make(map[string]productType, 0)
+
+	if name := doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).Value(); name == "" {
+		return sendErr("Add Planet: name cannot be empty")
+	} else if _, exists := planetMap[name]; exists {
+		return sendErr(fmt.Sprintf("Add Planet: planet with name '%v' already exists", name))
+	} else {
+		// fmt.Println("name:" + nameEl.Value())
+		newPlanet.Name = name
+	}
+
+	if sector := doc.GetElementByID("addPlanetSector").(*dom.HTMLInputElement).Value(); sector == "" {
+		// not warning about blank sector
+	} else {
+		// fmt.Println("sector: " + sector)
+		newPlanet.Sector = sector
+	}
+
+	if domPts := doc.GetElementByID("addPlanetPoints").(*dom.HTMLInputElement).Value(); domPts == "" {
+		return sendErr("Add Planet: domination points should not be empty")
+	} else if val, err := strconv.Atoi(domPts); err != nil {
+		return sendErr("Add Planet: unable to convert domination points to integer")
+	} else if val <= 0 {
+		return sendErr("Add Planet: domination points should be positive")
+	} else {
+		newPlanet.DomPoints = val
+	}
+
+	for prdId, prod := range baseProductMap {
+		if amt := doc.GetElementByID(fmt.Sprintf("%v_amt", prdId)).InnerHTML(); amt == "" {
+			// skip
+		} else if val, err := strconv.Atoi(amt); err != nil {
+			return sendErr("Add planet: " + err.Error())
+		} else if val <= 0 {
+			// zero, skip
+		} else {
+			fmt.Printf("prod: %v amt: %v\n", prdId, val)
+			prod.Demand = val
+			newPlanet.ProductList[prdId] = prod
+
+			// vol := prod.price * prod.Demand
+			// planet.currentMarketVol += vol
+			// planet.currentMarketVolByCat[prod.category] += vol
+		}
+	}
+
+	if len(newPlanet.ProductList) == 0 {
+		return sendErr("Add Planet: no products defined; must include at least one product")
+	}
+
+	newPlanet.calcMarketVol()
+
+	fmt.Printf("%+v\n", newPlanet)
+
+	planetMap[newPlanet.Name] = &newPlanet
+
+	// do an insert, assuming sorted by name for now
+	i, found := slices.BinarySearchFunc(planetDisplay, &newPlanet, func(a, b *planet) int {
+		return strings.Compare(strings.ToLower(a.Name), strings.ToLower(b.Name))
+
+	})
+	if found {
+		// this shouldn't happen, name was already checked
+		return sendErr("cannot add; name already exists (this shouldn't happen here)")
+	}
+
+	newPlanetDiv := generatePlanetDisplay(newPlanet)
+	pl := doc.GetElementByID("planetList")
+
+	if i == len(planetDisplay) {
+		planetDisplay = append(planetDisplay, &newPlanet)
+		// insert at the end
+		pl.AppendChild(newPlanetDiv)
+
+	} else {
+		// save current planet for dom insertion
+		var beforePlanet = planetDisplay[i]
+
+		planetDisplay = append(planetDisplay[:i+1], planetDisplay[i:]...)
+		planetDisplay[i] = &newPlanet
+
+		// insert before current i
+		befDiv := doc.GetElementByID(beforePlanet.Name)
+		pl.InsertBefore(newPlanetDiv, befDiv)
+	}
+
+	return nil
 }
 
-func (p planet) calcMarketShare() float32 {
+func (p *planet) calcMarketVol() {
+
+	// zero out before calc, just in case this is called elsewhere
+	p.market.current = 0
+	p.market.total = 0
+	// p.market.share = 0.0
+	p.marketByCat = make(map[categoryType]marketVolume, 0)
+
+	var (
+		totVol int
+		curVol int
+	)
+
+	for _, prod := range p.ProductList {
+		curVol = (prod.Supply * prod.price)
+		totVol = (prod.Demand * prod.price)
+
+		p.market.current += curVol
+		p.market.total += totVol
+
+		var (
+			mkt    marketVolume
+			exists bool
+		)
+
+		if mkt, exists = p.marketByCat[prod.category]; exists == false {
+			mkt = marketVolume{}
+			// p.marketByCat[prod.category] = mkt
+		}
+		mkt.current += curVol
+		mkt.total += totVol
+		p.marketByCat[prod.category] = mkt
+
+	}
+}
+
+func (p *planet) calcMarketShare() float32 {
 	return 0
 }
 

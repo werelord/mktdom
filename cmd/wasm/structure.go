@@ -35,20 +35,21 @@ const (
 // )
 
 type productType struct {
-	productTypeExport
-	productTypeInternal
-}
+	// productTypeInternal
+	// ProductTypeExternal
+	name     string
+	category categoryType
+	price    int
 
-type productTypeExport struct {
 	Supply int
 	Demand int
 }
 
-type productTypeInternal struct {
-	name     string
-	category categoryType
-	price    int
-}
+// type ProductTypeExternal struct {
+// }
+
+// type productTypeInternal struct {
+// }
 
 func (p productType) ID() string {
 	return toId(p.name)
@@ -65,10 +66,7 @@ func init() {
 	baseProductMap = make(map[string]productType, 18)
 
 	var f = func(name string, cat categoryType, price int) productType {
-		var prod = productType{
-			productTypeExport{},
-			productTypeInternal{name: name, category: cat, price: price},
-		}
+		var prod = productType{name: name, category: cat, price: price}
 		return prod
 	}
 
@@ -124,13 +122,35 @@ var productList = []string{
 	toId("Combat Robot"),
 }
 
-type planet struct {
-	name         string
-	sector       string
-	marketVolume int
-	marketShare  float32
-	domPoints    int
-	productList  map[string]productType
+type marketVolume struct {
+	current int
+	total   int
+	// share   float32
 }
 
-var planetList = make(map[string]planet, 0)
+type planet struct {
+	Name        string
+	Sector      string
+	DomPoints   int
+	ProductList map[string]productType
+
+	// calculated
+	market      marketVolume
+	marketByCat map[categoryType]marketVolume
+}
+
+// func (p planet) targetMarketShare() float32 {
+// 	// target market share to achieve market dominance is essentially the largest market demand for a category
+// 	var max = 0
+// 	for _, mv := range p.marketByCat {
+// 		if mv.total > max {
+// 			max = mv.total
+// 		}
+// 	}
+
+// 	return float32(max) / float32(p.market.total)
+
+// }
+
+var planetMap = make(map[string]*planet, 0)
+var planetDisplay []*planet

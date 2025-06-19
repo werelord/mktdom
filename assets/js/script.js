@@ -1,10 +1,3 @@
-function addPlanet() {
-    console.log("in add planet")
-    var result = goAddPlanet()
-    if ((result != null) && ('error' in result)) {
-        handleErr(result)
-    }
-}
 
 function addAmount(el) {
     var e = document.getElementById(el)
@@ -35,10 +28,24 @@ function switchSelected(el) {
 }
 
 function handleErr(err) {
-    console.log("error encocuntered:", err.error)
+    console.log("error encocuntered:", err)
     errtxt = document.getElementById("errorText")
-    errtxt.innerHTML = err.error
+    errtxt.innerHTML = err
 }
+
+function clearErrTxt() {
+    errtxt = document.getElementById("errorText")
+    errtxt.innerHTML = ""
+}
+
+function addPlanet() {
+    console.log("in add planet")
+    var result = goAddPlanet()
+    if ((result != null) && ('error' in result)) {
+        handleErr(result.error)
+    }
+}
+
 
 function showAddPlanet() {
     f = document.getElementById("addPlanetForm")
@@ -58,4 +65,5 @@ function cancelAddPlanet () {
         handleErr(result.error)
     }
     f.classList.add("hidden")
+    clearErrTxt()
 }
