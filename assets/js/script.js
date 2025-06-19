@@ -1,4 +1,12 @@
 
+function showToast (msg) {
+    var toast = document.getElementById("mtoast")
+    toast.innerHTML = msg
+    toast.classList.add("show")
+
+    setTimeout(function() { toast.className = toast.classList.remove("show"); }, 2500)
+}
+
 function addAmount(el) {
     var e = document.getElementById(el)
     e.innerHTML = +e.innerHTML + 48
@@ -12,37 +20,48 @@ function subAmount(el) {
 }
 
 function switchSelected(el) {
-    if (el.classList.contains("selected")) {
-        el.classList.remove('selected')
-    } else {
-        Array.prototype.slice.call(document.querySelectorAll('div[data-tag="planetList"] div')).forEach(function (element) {
-            // remove the selected clas
-            element.classList.remove('selected');
-        });
-        // add the selected class to the element that was clicked
-        el.classList.add('selected');
-    }
+    handleResult(goOnSelected(el))
+    // if (el.classList.contains("selected")) {
+    //     el.classList.remove('selected')
+    // } else {
+    //     Array.prototype.slice.call(document.querySelectorAll('div[data-tag="planetList"] div')).forEach(function (element) {
+    //         // remove the selected clas
+    //         element.classList.remove('selected');
+    //     });
+    //     // add the selected class to the element that was clicked
+    //     el.classList.add('selected');
+    // }
 
     // todo: update subsequent divs
 
 }
 
-function handleErr(err) {
-    console.log("error encocuntered:", err)
-    errtxt = document.getElementById("errorText")
-    errtxt.innerHTML = err
+function handleResult(result) {
+    if (result != null) {
+        errtxt = document.getElementById("errorText")
+        if ('error' in result) {
+            console.log("error encocuntered:", result.error)
+            errtxt.innerHTML = result.error
+            errtxt.classList.add("show")
+        } else if ('toast' in result) {
+            // make sure any errors are cleared
+            errtxt.classList.remove("show")
+            showToast(result.toast)
+            return true
+        }
+    }
 }
 
 function clearErrTxt() {
     errtxt = document.getElementById("errorText")
-    errtxt.innerHTML = ""
+    // errtxt.innerHTML = ""
+    errtxt.classList.remove("show")
 }
 
 function addPlanet() {
     console.log("in add planet")
-    var result = goAddPlanet()
-    if ((result != null) && ('error' in result)) {
-        handleErr(result.error)
+    if (handleResult(goAddPlanet())) {
+        clearAddPlanet()
     }
 }
 
@@ -57,13 +76,16 @@ function showAddPlanet() {
 function cancelAddPlanet () {
     f = document.getElementById("addPlanetForm")
 
+    clearAddPlanet()
+    clearErrTxt()
+    goGenPlanetForm()
+    f.classList.add("hidden")
+}
+
+function clearAddPlanet() {
+    f = document.getElementById("addPlanetForm")
+
     document.getElementById("addPlanetName").value = ""
     document.getElementById("addPlanetSector").value = ""
-
-    var result = goGenPlanetForm()
-       if ((result != null) && ('error' in result)) {
-        handleErr(result.error)
-    }
-    f.classList.add("hidden")
-    clearErrTxt()
+    document.getElementById("addPlanetPoints").value = ""
 }

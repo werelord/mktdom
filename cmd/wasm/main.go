@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"slices"
 	"sort"
@@ -15,13 +16,13 @@ func main() {
 	fmt.Println("go web assembly")
 	// js.Global().Set("formatJSON", jsonWrapper())
 	js.Global().Set("goLoadData", js.FuncOf(func(this js.Value, args []js.Value) any {
-		loadStoredPlanetData()
-		loadPlanetDisplay()
-		genPlanetForm()
 		return loadData()
 	}))
-	js.Global().Set("goOnSectorSelect", js.FuncOf(func(this js.Value, args []js.Value) any {
-		return onSectorSelect()
+	js.Global().Set("goOnSelected", js.FuncOf(func(this js.Value, args []js.Value) any {
+		if len(args) != 1 {
+			return sendErr("error in setting selected (wrong # of args)")
+		}
+		return onSelected(args[0].String())
 	}))
 	js.Global().Set("goAddPlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
 		return addPlanet()
@@ -32,25 +33,65 @@ func main() {
 
 	<-make(chan struct{})
 }
-
-func loadStoredPlanetData() {
-	// todo: load shit
-	temploadStoredPlanetData()
-}
-
-func loadData() any {
-	// todo: populate
-	fmt.Println("in loadData")
-	// loadSectorList()
-	// return sendErr("testing")
-	return nil
-}
-
 func sendErr(val string) map[string]any {
 	res := map[string]any{
 		"error": val,
 	}
 	return res
+}
+
+func sendToast(t string) map[string]any {
+	res := map[string]any{
+		"toast": t,
+	}
+	return res
+}
+
+func loadData() any {
+	// todo: populate
+
+	loadStoredPlanetData()
+	loadPlanetDisplay()
+	genPlanetForm()
+
+	// return sendErr("testing")
+	return nil
+}
+
+func loadStoredPlanetData() {
+
+	if obj := js.Global().Get("localStorage").Call("getItem", "planetMap"); obj.IsNull() {
+		// todo: nothing in storage; load example data??
+	} else {
+		// fmt.Printf("load successful, json: %v\n", obj.String())
+		if err := json.Unmarshal([]byte(obj.String()), &planetMap); err != nil {
+			fmt.Printf("error unmarshalling: %v\n", err)
+		} else {
+			// fmt.Printf("unmarshal successful: %+v\n", planetMap)
+			// set the base internal (non-exported) values
+			for _, planet := range planetMap {
+				for pname, prod := range planet.ProductList {
+					prod.productTypeInternal = baseProductMap[pname].productTypeInternal
+					planet.ProductList[pname] = prod
+				}
+				planet.calcMarketVol()
+			}
+		}
+	}
+}
+
+func savePlanetData() error {
+	fmt.Println("in savePlanetData")
+	str, err := json.Marshal(planetMap)
+	if err != nil {
+		fmt.Printf("error :%v\n", err)
+		return err
+	} else {
+		// fmt.Printf("json: %v\n", string(str))
+		js.Global().Get("localStorage").Call("setItem", "planetMap", string(str))
+		fmt.Println("savePlanetData successful")
+		return nil
+	}
 }
 
 func loadPlanetDisplay() any {
@@ -65,7 +106,7 @@ func loadPlanetDisplay() any {
 
 	planetDisplay = make([]*planet, 0, len(planetMap))
 	for _, p := range planetMap {
-		fmt.Println("formap:" + p.Name)
+		// fmt.Println("formap:" + p.Name)
 		planetDisplay = append(planetDisplay, p)
 	}
 	sort.Slice(planetDisplay, func(i, j int) bool {
@@ -85,11 +126,12 @@ func generatePlanetDisplay(p planet) dom.Element {
 
 	// full planet wrapper
 	fullPlanetDiv := doc.CreateElement("div")
-	fullPlanetDiv.SetID(p.Name)
+	// fullPlanetDiv.SetID(p.Name)
 	fullPlanetDiv.Class().SetString("fullPlanetDetails")
-	fullPlanetDiv.SetAttribute("onClick", "switchSelected(this)")
+	fullPlanetDiv.SetAttribute("onClick", fmt.Sprintf("switchSelected('%v')", p.Name))
 
 	planetWrapperDiv := doc.CreateElement("div")
+	planetWrapperDiv.SetID(p.Name)
 	// planetWrapperDiv.SetAttribute("onClick", "switchSelected(this)")
 	fullPlanetDiv.AppendChild(planetWrapperDiv)
 
@@ -107,7 +149,7 @@ func generatePlanetDisplay(p planet) dom.Element {
 	marketVolDiv := doc.CreateElement("div")
 	marketVolDiv.SetInnerHTML(fmt.Sprintf("market cap: %v", p.market.total))
 	marketShareDiv := doc.CreateElement("div")
-	marketShareDiv.SetInnerHTML(fmt.Sprintf("market share: %.2f%%", (float32(p.market.current) / float32(p.market.total))))
+	marketShareDiv.SetInnerHTML(fmt.Sprintf("market share: %.2f%%", (float32(p.market.current) / float32(p.market.total) * 100)))
 	pointsDiv := doc.CreateElement("div")
 	pointsDiv.SetInnerHTML(fmt.Sprintf("points: %v", p.DomPoints))
 	detailsDiv.AppendChild(sectorDiv)
@@ -129,8 +171,8 @@ func generatePlanetDisplay(p planet) dom.Element {
 }
 
 func genPlanetForm() any {
-	fmt.Println("in genPlanetForm()")
-	// return nil
+	// fmt.Println("in genPlanetForm()")
+
 	doc := dom.GetWindow().Document()
 	table := doc.GetElementByID("addPlanetTable")
 
@@ -209,9 +251,31 @@ func genPlanetForm() any {
 	return nil
 }
 
-func onSectorSelect() any {
+func onSelected(newSel string) any {
+	// fmt.Printf("onSelected, id=%v\n", newSel)
 
-	return sendErr("not yet implemented")
+	var (
+		prevSel = selected
+		doc     = dom.GetWindow().Document()
+	)
+
+	if prevSel != "" {
+		var oldDiv = doc.GetElementByID(prevSel)
+		oldDiv.Class().Remove("selected")
+	}
+
+	if newSel == prevSel {
+		// same object, its just a deselect
+		selected = ""
+	} else {
+		var newDiv = doc.GetElementByID(newSel)
+		newDiv.Class().Add("selected")
+		selected = newSel
+	}
+
+	// todo: other stuff?
+
+	return nil
 }
 func addPlanet() any {
 
@@ -268,10 +332,12 @@ func addPlanet() any {
 	}
 
 	newPlanet.calcMarketVol()
-
-	fmt.Printf("%+v\n", newPlanet)
+	// fmt.Printf("adding planet: %+v\n", newPlanet)
 
 	planetMap[newPlanet.Name] = &newPlanet
+	if err := savePlanetData(); err != nil {
+		return sendErr(fmt.Sprintf("error saving planet data: %v", err))
+	}
 
 	// do an insert, assuming sorted by name for now
 	i, found := slices.BinarySearchFunc(planetDisplay, &newPlanet, func(a, b *planet) int {
@@ -303,11 +369,11 @@ func addPlanet() any {
 		pl.InsertBefore(newPlanetDiv, befDiv)
 	}
 
-	return nil
+	return sendToast(fmt.Sprintf("Planet \"%v\" added", newPlanet.Name))
 }
 
 func (p *planet) calcMarketVol() {
-
+	// fmt.Printf("before planet: %+v\n", *p)
 	// zero out before calc, just in case this is called elsewhere
 	p.market.current = 0
 	p.market.total = 0
@@ -340,11 +406,12 @@ func (p *planet) calcMarketVol() {
 		p.marketByCat[prod.category] = mkt
 
 	}
+	// fmt.Printf("after planet: %+v\n", *p)
 }
 
-func (p *planet) calcMarketShare() float32 {
-	return 0
-}
+// func (p *planet) calcMarketShare() float32 {
+// 	return 0
+// }
 
 // func getSectorList() []string {
 // 	var list = []string{"sector 1", "sector 2", "foobar"}

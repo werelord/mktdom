@@ -35,21 +35,18 @@ const (
 // )
 
 type productType struct {
-	// productTypeInternal
-	// ProductTypeExternal
+	productTypeInternal
+	ProductTypeExternal
+}
+type productTypeInternal struct {
 	name     string
 	category categoryType
 	price    int
-
+}
+type ProductTypeExternal struct {
 	Supply int
 	Demand int
 }
-
-// type ProductTypeExternal struct {
-// }
-
-// type productTypeInternal struct {
-// }
 
 func (p productType) ID() string {
 	return toId(p.name)
@@ -66,7 +63,9 @@ func init() {
 	baseProductMap = make(map[string]productType, 18)
 
 	var f = func(name string, cat categoryType, price int) productType {
-		var prod = productType{name: name, category: cat, price: price}
+		var prod = productType{
+			productTypeInternal: productTypeInternal{name: name, category: cat, price: price},
+		}
 		return prod
 	}
 
@@ -152,5 +151,8 @@ type planet struct {
 
 // }
 
-var planetMap = make(map[string]*planet, 0)
-var planetDisplay []*planet
+var (
+	planetMap = make(map[string]*planet, 0)
+	planetDisplay []*planet
+	selected string
+)

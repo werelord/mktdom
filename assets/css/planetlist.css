@@ -6,6 +6,11 @@
     font-size: 20px;
     color: red;
     text-align: center;
+    visibility: hidden;
+}
+
+.errorText.show {
+    visibility: visible;
 }
 
 .toplevel {
@@ -72,3 +77,26 @@
     padding: 3px;
     font-size: 14px;
 }
+
+#mtoast {
+    visibility: hidden;
+    position: fixed;
+    /* min-width: 250px; */
+    margin-left: -125px;
+    height: 20px;
+    background-color: lightgreen;
+    font-size: 20px;
+    /* box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.12); */
+    text-align: center;
+    border-radius:4px;
+    padding: 16px;
+    z-index: 99;
+    left: 50%;
+    top: 50%;
+    border: 1px solid black;
+}
+
+#mtoast.show {
+    visibility: visible;
+}
+
