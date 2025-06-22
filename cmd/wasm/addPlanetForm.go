@@ -10,7 +10,7 @@ import (
 )
 
 func showAddPlanet(planetStr string) any {
-	fmt.Println("todo: " + planetStr)
+	// fmt.Println("todo: " + planetStr)
 	var pl planet
 
 	if planetStr != "" {
@@ -20,6 +20,7 @@ func showAddPlanet(planetStr string) any {
 		} else {
 			pl = *p
 		}
+		// make sure the correct buttons are set
 	}
 	return genPlanetForm(pl)
 }
@@ -28,6 +29,18 @@ func genPlanetForm(p planet) any {
 	// fmt.Println("in genPlanetForm():", p)
 
 	doc := dom.GetWindow().Document()
+
+	// make sure the correct buttons are shown.. keying off the planet name being empy whether its a
+	// save or an add
+	addButton := doc.GetElementByID("addPlanetButton")
+	saveButton := doc.GetElementByID("savePlanetButton")
+	if p.Name == "" {
+		addButton.Class().Remove("displayNone")
+		saveButton.Class().Add("displayNone")
+	} else {
+		addButton.Class().Add("displayNone")
+		saveButton.Class().Remove("displayNone")
+	}
 
 	doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).SetValue(p.Name)
 	doc.GetElementByID("addPlanetSector").(*dom.HTMLInputElement).SetValue(p.Sector)

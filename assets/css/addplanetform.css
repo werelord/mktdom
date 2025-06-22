@@ -78,6 +78,7 @@ input[type=number]:focus {
     border: none;
     color: white;
     padding: 16px;
+    margin: 10px;
     /* width: 50%; */
     /* text-align: center; */
     /* text-decoration: none; */
@@ -97,12 +98,14 @@ input[type=number]:focus {
     text-align: center;
 }
 
-
-
 .selected {
     background-color: lightgreen !important;
 }
 
 .hidden {
     visibility: hidden;
+}
+
+.displayNone {
+    display: none;
 }

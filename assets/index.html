@@ -11,9 +11,9 @@
     <div id="mtoast"></div>
     <!-- <div><button onclick="showToast('this is a test')">Test toast</button></div> -->
     <div class="navMenu">
-        <button class="addPlanetButton" value="Add Planet" onclick="showAddPlanet()">Add Planet</button>
+        <button class="addPlanetButton" onclick="showAddPlanet()">Add Planet</button>
     </div>
-        <div id="errorText" class="errorText">this is hidden</div>
+    <div id="errorText" class="errorText">this is hidden</div>
     </div>
     <div class="toplevel">
 
@@ -256,7 +256,6 @@
             </div>
         </div>
 
-
         <div id="addPlanetForm" class="addPlanetForm hidden">
             <div class="addPlanetFormRow">
                 <label for="planet">Planet:</label>
@@ -278,7 +277,7 @@
             </div> -->
             <div class="addPlanetFormRow">
                 <table id="addPlanetTable">
-                    <tr style="display: none;">
+                    <tr class="hidden">
                         <td></td>
                         <td></td>
                         <td>0000</td>
@@ -289,37 +288,113 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td class="productLabel" id="transport_bot">Transport Bot:</td>
-                        <td><button class="productButton" onclick="subAmount('transport_bot_amt');">-</button></td>
+                        <td class="productLabel">Transport Bot</td>
+                        <td><button class="productButton" onclick="subAmount('transport_bot_amt')">-</button></td>
                         <td class="productAmount" id="transport_bot_amt">0</td>
-                        <td><button class="productButton" onclick="addAmount('transport_bot_amt');">+</button></td>
-                        <td class="productLabel" id="transport_bot">Heavy Duty Transport Bot:</td>
-                        <td><button class="productButton"
-                                onclick="subAmount('heavy_duty_transport_bot_amt');">-</button></td>
+                        <td><button class="productButton" onclick="addAmount('transport_bot_amt')">+</button></td>
+                        <td class="productLabel">Maitenance Drone</td>
+                        <td><button class="productButton" onclick="subAmount('maitenance_drone_amt')">-</button></td>
+                        <td class="productAmount" id="maitenance_drone_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('maitenance_drone_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td class="productLabel">Heavy Duty Transport Bot</td>
+                        <td><button class="productButton" onclick="subAmount('heavy_duty_transport_bot_amt')">-</button>
+                        </td>
                         <td class="productAmount" id="heavy_duty_transport_bot_amt">0</td>
-                        <td><button class="productButton"
-                                onclick="addAmount('heavy_duty_transport_bot_amt');">+</button></td>
+                        <td><button class="productButton" onclick="addAmount('heavy_duty_transport_bot_amt')">+</button>
+                        </td>
+                        <td class="productLabel">Vaccuum Bot</td>
+                        <td><button class="productButton" onclick="subAmount('vaccuum_bot_amt')">-</button></td>
+                        <td class="productAmount" id="vaccuum_bot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('vaccuum_bot_amt')">+</button></td>
                     </tr>
                     <tr>
-                        <td class="productLabel" id="transport_bot">Heavy Duty Transport Bot:</td>
-                        <td><button class="productButton" onclick="return false;">-</button></td>
-                        <td class="productAmount" id="transport_bot_amt">0</td>
-                        <td><button class="productButton" onclick="return false;">+</button></td>
-                        <td class="productLabel" id="transport_bot">Transport Bot:</td>
-                        <td><button class="productButton" onclick="return false;">-</button></td>
-                        <td class="productAmount" id="transport_bot_amt">0</td>
-                        <td><button class="productButton" onclick="return false;">+</button></td>
+                        <td class="productLabel">Transport Drone</td>
+                        <td><button class="productButton" onclick="subAmount('transport_drone_amt')">-</button></td>
+                        <td class="productAmount" id="transport_drone_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('transport_drone_amt')">+</button></td>
+                        <td class="productLabel">Cleaning Bot</td>
+                        <td><button class="productButton" onclick="subAmount('cleaning_bot_amt')">-</button></td>
+                        <td class="productAmount" id="cleaning_bot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('cleaning_bot_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td class="productLabel">Mining Drone</td>
+                        <td><button class="productButton" onclick="subAmount('mining_drone_amt')">-</button></td>
+                        <td class="productAmount" id="mining_drone_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('mining_drone_amt')">+</button></td>
+                        <td class="productLabel">Light Bot</td>
+                        <td><button class="productButton" onclick="subAmount('light_bot_amt')">-</button></td>
+                        <td class="productAmount" id="light_bot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('light_bot_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td class="productLabel">Miner Robot</td>
+                        <td><button class="productButton" onclick="subAmount('miner_robot_amt')">-</button></td>
+                        <td class="productAmount" id="miner_robot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('miner_robot_amt')">+</button></td>
+                        <td class="productLabel">Screen Bot</td>
+                        <td><button class="productButton" onclick="subAmount('screen_bot_amt')">-</button></td>
+                        <td class="productAmount" id="screen_bot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('screen_bot_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td class="productLabel">Planter Drone</td>
+                        <td><button class="productButton" onclick="subAmount('planter_drone_amt')">-</button></td>
+                        <td class="productAmount" id="planter_drone_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('planter_drone_amt')">+</button></td>
+                        <td class="productLabel">Snack Bot</td>
+                        <td><button class="productButton" onclick="subAmount('snack_bot_amt')">-</button></td>
+                        <td class="productAmount" id="snack_bot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('snack_bot_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td class="productLabel">Farmer Robot</td>
+                        <td><button class="productButton" onclick="subAmount('farmer_robot_amt')">-</button></td>
+                        <td class="productAmount" id="farmer_robot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('farmer_robot_amt')">+</button></td>
+                        <td class="productLabel">Personal Assistant Robot</td>
+                        <td><button class="productButton" onclick="subAmount('personal_assistant_robot_amt')">-</button>
+                        </td>
+                        <td class="productAmount" id="personal_assistant_robot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('personal_assistant_robot_amt')">+</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="productLabel">Science Assistant Drone</td>
+                        <td><button class="productButton" onclick="subAmount('science_assistant_drone_amt')">-</button>
+                        </td>
+                        <td class="productAmount" id="science_assistant_drone_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('science_assistant_drone_amt')">+</button>
+                        </td>
+                        <td class="productLabel">Combat Drone</td>
+                        <td><button class="productButton" onclick="subAmount('combat_drone_amt')">-</button></td>
+                        <td class="productAmount" id="combat_drone_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('combat_drone_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td class="productLabel">Science Robot</td>
+                        <td><button class="productButton" onclick="subAmount('science_robot_amt')">-</button></td>
+                        <td class="productAmount" id="science_robot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('science_robot_amt')">+</button></td>
+                        <td class="productLabel">Combat Robot</td>
+                        <td><button class="productButton" onclick="subAmount('combat_robot_amt')">-</button></td>
+                        <td class="productAmount" id="combat_robot_amt">0</td>
+                        <td><button class="productButton" onclick="addAmount('combat_robot_amt')">+</button></td>
                     </tr>
                 </table>
             </div>
             <div class="addPlanetFormRow">
-                <label></label>
-                <button class="addPlanetButton" onclick="onAddPlanet();">Add Planet</button>
-                <label></label>
+                <!-- <label></label> -->
+                <button id="addPlanetButton" class="addPlanetButton" onclick="onAddPlanet();">Add Planet</button>
+                <button id="savePlanetButton" class="addPlanetButton displayNone" onclick="onSavePlanet();">Save Planet</button>
+                <!-- <label></label> -->
                 <button class="addPlanetButton" onclick="cancelAddPlanet();"
                     style="background-color: red;">Cancel</button>
             </div>
         </div>
+
     </div>
     <div id="error">
     </div>
