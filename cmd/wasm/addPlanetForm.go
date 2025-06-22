@@ -11,13 +11,28 @@ import (
 
 func showAddPlanet(planetStr string) any {
 	fmt.Println("todo: " + planetStr)
-	return nil
+	var pl planet
+
+	if planetStr != "" {
+		// load planet for editing
+		if p, exists := planetMap[planetStr]; exists == false {
+			return sendErr(fmt.Sprintf("error showing form; planet '%v' does not exist", planetStr))
+		} else {
+			pl = *p
+		}
+	}
+	return genPlanetForm(pl)
 }
 
-func genPlanetForm() any {
-	// fmt.Println("in genPlanetForm()")
+func genPlanetForm(p planet) any {
+	// fmt.Println("in genPlanetForm():", p)
 
 	doc := dom.GetWindow().Document()
+
+	doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).SetValue(p.Name)
+	doc.GetElementByID("addPlanetSector").(*dom.HTMLInputElement).SetValue(p.Sector)
+	doc.GetElementByID("addPlanetPoints").(*dom.HTMLInputElement).SetValue(fmt.Sprintf("%v", p.DomPoints))
+
 	table := doc.GetElementByID("addPlanetTable")
 
 	// reset everything
@@ -45,37 +60,44 @@ func genPlanetForm() any {
 
 	table.AppendChild(hiddenrow)
 
-	var genProdTd = func(r dom.Element, p productType) {
+	var genProdTd = func(root dom.Element, p planet, prod productType) {
 		// var tdlist = make([]dom.Element, 0)
 
 		label := doc.CreateElement("td")
 		label.Class().SetString("productLabel")
 		// label.SetAttribute("id", fmt.Sprintf("%v", spToUl(p.ID())))
 		// fmt.Println("in genPlanetForm, " + p.name)
-		label.SetInnerHTML(p.name)
-		r.AppendChild(label)
+		label.SetInnerHTML(prod.name)
+		root.AppendChild(label)
 
 		mbntd := doc.CreateElement("td")
 		minus := doc.CreateElement("button")
 		minus.Class().SetString("productButton")
-		minus.SetAttribute("onclick", fmt.Sprintf("subAmount('%v_amt')", p.ID()))
+		minus.SetAttribute("onclick", fmt.Sprintf("subAmount('%v_amt')", prod.ID()))
 		minus.SetInnerHTML("-")
 		mbntd.AppendChild(minus)
-		r.AppendChild(mbntd)
+		root.AppendChild(mbntd)
 
 		amt := doc.CreateElement("td")
 		amt.Class().SetString("productAmount")
-		amt.SetID(fmt.Sprintf("%v_amt", p.ID()))
-		amt.SetInnerHTML(fmt.Sprintf("%v", 0))
-		r.AppendChild(amt)
+		amt.SetID(fmt.Sprintf("%v_amt", prod.ID()))
+		var prodAmt int
+
+		// fmt.Printf("planet %v, product %v\n", p, prod.ID())
+		if existingProd, exists := p.ProductList[prod.ID()]; exists {
+			// fmt.Printf("exists!! %v\n", existingProd)
+			prodAmt = existingProd.Demand
+		}
+		amt.SetInnerHTML(fmt.Sprintf("%v", prodAmt))
+		root.AppendChild(amt)
 
 		pbntd := doc.CreateElement("td")
 		plus := doc.CreateElement("button")
 		plus.Class().SetString("productButton")
-		plus.SetAttribute("onclick", fmt.Sprintf("addAmount('%v_amt')", p.ID()))
+		plus.SetAttribute("onclick", fmt.Sprintf("addAmount('%v_amt')", prod.ID()))
 		plus.SetInnerHTML("+")
 		pbntd.AppendChild(plus)
-		r.AppendChild(pbntd)
+		root.AppendChild(pbntd)
 
 	}
 
@@ -84,8 +106,8 @@ func genPlanetForm() any {
 
 		row := doc.CreateElement("tr")
 
-		genProdTd(row, p1)
-		genProdTd(row, p2)
+		genProdTd(row, p, p1)
+		genProdTd(row, p, p2)
 
 		// plus := doc.CreateElement("button")
 

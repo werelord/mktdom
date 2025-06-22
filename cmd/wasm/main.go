@@ -54,7 +54,6 @@ func loadData() any {
 	loadStoredPlanetData()
 	// fmt.Println("skipping loading display")
 	loadPlanetDisplay()
-	genPlanetForm()
 
 	// return sendErr("testing")
 	return nil
