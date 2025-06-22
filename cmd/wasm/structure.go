@@ -4,35 +4,20 @@ import "strings"
 
 type categoryType int
 
-const (
-	Appliances categoryType = iota
-	Agriculture
-	Logistics
-	Military
+const (	// ordered by tab order in finances
+	Logistics categoryType = iota
+	Appliances
 	Mining
+	Agriculture
 	Scientific
+	Military
 )
 
-// const (
-// 	transportBot productType = iota
-// 	heavyDutyTransportBot
-// 	transportDrone
-// 	maitenanceDrone
-// 	vacuumBot
-// 	cleaningBot
-// 	lightBot
-// 	screenBot
-// 	snackBot
-// 	personalAssistantRobot
-// 	miningDrone
-// 	minerRobot
-// 	planterDrone
-// 	farmerRobot
-// 	scienceAssistantDrone
-// 	scienceRobot
-// 	combatDrone
-// 	combatRobot
-// )
+var catList = []categoryType{Logistics, Appliances, Mining, Agriculture, Scientific, Military}
+
+func (c categoryType) String() string {
+	return [...]string{"Logistics", "Appliances", "Mining", "Agriculture", "Scientific", "Military"}[c]
+}
 
 type productType struct {
 	productTypeInternal

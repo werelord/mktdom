@@ -8,72 +8,206 @@
 </head>
 
 <body>
-    <div id="mtoast" ></div>
+    <div id="mtoast"></div>
     <!-- <div><button onclick="showToast('this is a test')">Test toast</button></div> -->
     <div class="navMenu">
         <button class="addPlanetButton" value="Add Planet" onclick="showAddPlanet()">Add Planet</button>
     </div>
     <div id="errorText" class="errorText">this is hidden</div>
     <div class="toplevel">
+
         <div id="planetList" class="planetContainer" data-tag="planetList">
-            <!-- <div class="fullPlanetDetails">
-                <div onclick="switchSelected(this)">
-                    <div class="planetName">foo</div>
+            <div class="fullPlanetDetails" onclick="switchSelected('ff')">
+                <div id="ff" class="planetInfo">
+                    <div class="planetName">ff</div>
                     <div class="planetDetails">
-                        <div>sector 1</div>
-                        <div>market vol: 53,255</div>
-                        <div>points:13</div>
-                        <div>market share: 47%</div>
+                        <div>sector dd</div>
+                        <div>market cap: 10272</div>
+                        <div>points: 33</div>
+                        <div>market share: 0.00%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>transport bot 3</div>
-                    <div>miner robot 11</div>
-                    <div>transport bot 3</div>
-                    <div>miner robot 11</div>
+                    <div>Transport Drone: 0/96</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Logistics">Logistics: 0.0 / 100.0%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails">
-                <div onclick="switchSelected(this)">
-                    <div class="planetName">foo</div>
+            <div class="fullPlanetDetails" onclick="switchSelected('planet 2')">
+                <div id="planet 2" class="planetInfo">
+                    <div class="planetName">planet 2</div>
                     <div class="planetDetails">
-                        <div>sector 1</div>
-                        <div>market vol: 53,255</div>
-                        <div>points:13</div>
-                        <div>market share: 47%</div>
+                        <div>sector sector 2</div>
+                        <div>market cap: 5520</div>
+                        <div>points: 42</div>
+                        <div>market share: 82.97%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>transport bot 3</div>
-                    <div>miner robot 11</div>
-                    <div>transport bot 3</div>
-                    <div>miner robot 11</div>
+                    <div>Miner Robot: 5/6</div>
+                    <div>Transport Bot: 4/6</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                    <div id="Mining">Mining: 83.3 / 16.7%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails">
-                <div onclick="switchSelected(this)">
-                    <div class="planetName">foo</div>
+            <div class="fullPlanetDetails" onclick="switchSelected('planet 32')">
+                <div id="planet 32" class="planetInfo">
+                    <div class="planetName">planet 32</div>
                     <div class="planetDetails">
-                        <div>sector 1</div>
-                        <div>market vol: 53,255</div>
-                        <div>points:13</div>
-                        <div>market share: 47%</div>
+                        <div>sector sector 3</div>
+                        <div>market cap: 5520</div>
+                        <div>points: 1337</div>
+                        <div>market share: 82.97%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>transport bot 3</div>
-                    <div>miner robot 11</div>
-                    <div>transport bot 3</div>
-                    <div>miner robot 11</div>
-                    <div>transport bot 3</div>
-                    <div>miner robot 11</div>
-                    <div>transport bot 3</div>
-                    <div>miner robot 11</div>
+                    <div>Miner Robot: 5/6</div>
+                    <div>Transport Bot: 4/6</div>
                 </div>
-            </div> -->
+                <div class="planetCategoryMarket">
+                    <div id="Mining">Mining: 83.3 / 16.7%</div>
+                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails" onclick="switchSelected('planet 331')">
+                <div id="planet 331" class="planetInfo">
+                    <div class="planetName">planet 331</div>
+                    <div class="planetDetails">
+                        <div>sector sector 1</div>
+                        <div>market cap: 5520</div>
+                        <div>points: 134</div>
+                        <div>market share: 82.97%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>Miner Robot: 5/6</div>
+                    <div>Transport Bot: 4/6</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Mining">Mining: 83.3 / 16.7%</div>
+                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails" onclick="switchSelected('planet 4')">
+                <div id="planet 4" class="planetInfo">
+                    <div class="planetName">planet 4</div>
+                    <div class="planetDetails">
+                        <div>sector sector 1</div>
+                        <div>market cap: 5520</div>
+                        <div>points: 134</div>
+                        <div>market share: 82.97%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>Miner Robot: 5/6</div>
+                    <div>Transport Bot: 4/6</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                    <div id="Mining">Mining: 83.3 / 16.7%</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails" onclick="switchSelected('planet 5')">
+                <div id="planet 5" class="planetInfo">
+                    <div class="planetName">planet 5</div>
+                    <div class="planetDetails">
+                        <div>sector sector 2</div>
+                        <div>market cap: 5520</div>
+                        <div>points: 42</div>
+                        <div>market share: 82.97%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>Transport Bot: 4/6</div>
+                    <div>Miner Robot: 5/6</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Mining">Mining: 83.3 / 16.7%</div>
+                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails" onclick="switchSelected('planet6')">
+                <div id="planet6" class="planetInfo">
+                    <div class="planetName">planet6</div>
+                    <div class="planetDetails">
+                        <div>sector sector 3</div>
+                        <div>market cap: 5520</div>
+                        <div>points: 1337</div>
+                        <div>market share: 82.97%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>Transport Bot: 4/6</div>
+                    <div>Miner Robot: 5/6</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Mining">Mining: 83.3 / 16.7%</div>
+                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails" onclick="switchSelected('sdf')">
+                <div id="sdf" class="planetInfo">
+                    <div class="planetName">sdf</div>
+                    <div class="planetDetails">
+                        <div>sector dd</div>
+                        <div>market cap: 10272</div>
+                        <div>points: 55</div>
+                        <div>market share: 0.00%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>Transport Drone: 0/96</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Logistics">Logistics: 0.0 / 100.0%</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails" onclick="switchSelected('sdfsd')">
+                <div id="sdfsd" class="planetInfo">
+                    <div class="planetName">sdfsd</div>
+                    <div class="planetDetails">
+                        <div>sector ddd</div>
+                        <div>market cap: 77856</div>
+                        <div>points: 454</div>
+                        <div>market share: 0.00%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>Science Assistant Drone: 0/48</div>
+                    <div>Transport Bot: 0/48</div>
+                    <div>Heavy Duty Transport Bot: 0/96</div>
+                    <div>Personal Assistant Robot: 0/96</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Appliances">Appliances: 0.0 / 100.0%</div>
+                    <div id="Scientific">Scientific: 0.0 / 100.0%</div>
+                    <div id="Logistics">Logistics: 0.0 / 100.0%</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails" onclick="switchSelected('sds')">
+                <div id="sds" class="planetInfo">
+                    <div class="planetName">sds</div>
+                    <div class="planetDetails">
+                        <div>sector d</div>
+                        <div>market cap: 15408</div>
+                        <div>points: 44</div>
+                        <div>market share: 0.00%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div>Transport Drone: 0/144</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Logistics">Logistics: 0.0 / 100.0%</div>
+                </div>
+            </div>
         </div>
 
-        <div id="addPlanetForm" class="addPlanetForm ">
+
+        <div id="addPlanetForm" class="addPlanetForm hidden">
             <div class="addPlanetFormRow">
                 <label for="planet">Planet:</label>
                 <input type="text" id="addPlanetName">
@@ -94,7 +228,7 @@
             </div> -->
             <div class="addPlanetFormRow">
                 <table id="addPlanetTable">
-                    <!-- <tr class="hidden"> 
+                    <tr style="display: none;">
                         <td></td>
                         <td></td>
                         <td>0000</td>
@@ -110,9 +244,11 @@
                         <td class="productAmount" id="transport_bot_amt">0</td>
                         <td><button class="productButton" onclick="addAmount('transport_bot_amt');">+</button></td>
                         <td class="productLabel" id="transport_bot">Heavy Duty Transport Bot:</td>
-                        <td><button class="productButton" onclick="subAmount('heavy_duty_transport_bot_amt');">-</button></td>
+                        <td><button class="productButton"
+                                onclick="subAmount('heavy_duty_transport_bot_amt');">-</button></td>
                         <td class="productAmount" id="heavy_duty_transport_bot_amt">0</td>
-                        <td><button class="productButton" onclick="addAmount('heavy_duty_transport_bot_amt');">+</button></td>
+                        <td><button class="productButton"
+                                onclick="addAmount('heavy_duty_transport_bot_amt');">+</button></td>
                     </tr>
                     <tr>
                         <td class="productLabel" id="transport_bot">Heavy Duty Transport Bot:</td>
@@ -123,14 +259,15 @@
                         <td><button class="productButton" onclick="return false;">-</button></td>
                         <td class="productAmount" id="transport_bot_amt">0</td>
                         <td><button class="productButton" onclick="return false;">+</button></td>
-                    </tr> -->
+                    </tr>
                 </table>
             </div>
             <div class="addPlanetFormRow">
                 <label></label>
                 <button class="addPlanetButton" onclick="addPlanet();">Add Planet</button>
                 <label></label>
-                <button class="addPlanetButton" onclick="cancelAddPlanet();" style="background-color: red;">Cancel</button>
+                <button class="addPlanetButton" onclick="cancelAddPlanet();"
+                    style="background-color: red;">Done</button>
             </div>
         </div>
     </div>

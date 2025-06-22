@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"slices"
 	"sort"
 	"strconv"
@@ -51,6 +52,7 @@ func loadData() any {
 	// todo: populate
 
 	loadStoredPlanetData()
+	// fmt.Println("skipping loading display")
 	loadPlanetDisplay()
 	genPlanetForm()
 
@@ -132,6 +134,7 @@ func generatePlanetDisplay(p planet) dom.Element {
 
 	planetWrapperDiv := doc.CreateElement("div")
 	planetWrapperDiv.SetID(p.Name)
+	planetWrapperDiv.Class().SetString("planetInfo")
 	// planetWrapperDiv.SetAttribute("onClick", "switchSelected(this)")
 	fullPlanetDiv.AppendChild(planetWrapperDiv)
 
@@ -166,6 +169,41 @@ func generatePlanetDisplay(p planet) dom.Element {
 		prodDiv.SetInnerHTML(fmt.Sprintf("%v: %v/%v", prod.name, prod.Supply, prod.Demand))
 		marketDiv.AppendChild(prodDiv)
 	}
+
+	categoryDiv := doc.CreateElement("div")
+	categoryDiv.Class().SetString("planetCategoryMarket")
+	// var (
+	// 	max   int
+	// 	maxEl dom.Element
+	// )
+
+	// for cat, catMarket := range p.marketByCat {
+	for _, cat := range catList {
+		if catMarket, exists := p.marketByCat[cat]; exists {
+
+			catMarketDiv := doc.CreateElement("div")
+			catMarketDiv.SetID(cat.String())
+
+			var (
+				cur = float64(catMarket.current) / float64(p.market.total) * 100
+				opp = (float64(catMarket.total) - float64(catMarket.current)) / float64(p.market.total) * 100
+			)
+
+			cur = math.Round(cur*100) / 100
+			opp = math.Round(opp*100) / 100
+
+			catMarketDiv.SetInnerHTML(fmt.Sprintf("%v: %.1f / %.1f%%", cat.String(), cur, opp))
+
+			// for highlighting
+			// if catMarket.total > max {
+			// 	max = catMarket.total
+			// 	maxEl = catMarketDiv
+			// }
+			categoryDiv.AppendChild(catMarketDiv)
+		}
+	}
+	// maxEl.Class().Add("highlight")
+	fullPlanetDiv.AppendChild(categoryDiv)
 
 	return fullPlanetDiv
 }
