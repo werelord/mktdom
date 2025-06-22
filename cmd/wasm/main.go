@@ -22,11 +22,14 @@ func main() {
 		}
 		return onSelected(args[0].String())
 	}))
-	js.Global().Set("goAddPlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
-		return addPlanet()
+	js.Global().Set("goOnAddPlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
+		return onAddPlanet()
 	}))
-	js.Global().Set("goGenPlanetForm", js.FuncOf(func(this js.Value, args []js.Value) any {
-		return genPlanetForm()
+	js.Global().Set("goShowAddPlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
+		if len(args) != 1 {
+			return sendErr("error in showing Add Planet form (wrong # of args)")
+		}
+		return showAddPlanet(args[0].String())
 	}))
 
 	<-make(chan struct{})
@@ -103,11 +106,15 @@ func loadPlanetDisplay() any {
 		planetListDiv.RemoveChild(child)
 	}
 
+	planetListDiv.AppendChild(genPlanetHeader(doc))
+
 	planetDisplay = make([]*planet, 0, len(planetMap))
 	for _, p := range planetMap {
 		// fmt.Println("formap:" + p.Name)
 		planetDisplay = append(planetDisplay, p)
 	}
+
+	// sort by name
 	sort.Slice(planetDisplay, func(i, j int) bool {
 		return planetDisplay[i].Name < planetDisplay[j].Name
 	})
@@ -125,20 +132,64 @@ func generatePlanetDisplay(p planet) dom.Element {
 
 	// full planet wrapper
 	fullPlanetDiv := doc.CreateElement("div")
-	// fullPlanetDiv.SetID(p.Name)
+	fullPlanetDiv.SetID(p.Name)
 	fullPlanetDiv.Class().SetString("fullPlanetDetails")
 	fullPlanetDiv.SetAttribute("onClick", fmt.Sprintf("switchSelected('%v')", p.Name))
 
+	fullPlanetDiv.AppendChild(genPlanetInfo(doc, p))
+
+	fullPlanetDiv.AppendChild(genPlanetMarket(doc, p))
+
+	fullPlanetDiv.AppendChild(genPlanetCatMarket(doc, p))
+
+	return fullPlanetDiv
+}
+
+func genPlanetHeader(doc dom.Document) dom.Element {
+
+	headerdiv := doc.CreateElement("div")
+	headerdiv.Class().SetString("fullPlanetDetails")
+
+	info := doc.CreateElement("div")
+	info.Class().SetString("planetInfoHeader")
+	info.SetInnerHTML("Planet Information")
+
+	market := doc.CreateElement("div")
+	market.Class().SetString("planetMarketHeader")
+	market.SetInnerHTML("Products (my amt / total amt)")
+
+	category := doc.CreateElement("div")
+	category.Class().SetString("planetCategoryMarketHeader")
+	category.SetInnerHTML("Category (my share / opp share %)")
+
+	headerdiv.AppendChild(info)
+	headerdiv.AppendChild(market)
+	headerdiv.AppendChild(category)
+
+	return headerdiv
+}
+
+func genPlanetInfo(doc dom.Document, p planet) dom.Element {
+
 	planetWrapperDiv := doc.CreateElement("div")
-	planetWrapperDiv.SetID(p.Name)
+	// planetWrapperDiv.SetID(p.Name)
 	planetWrapperDiv.Class().SetString("planetInfo")
 	// planetWrapperDiv.SetAttribute("onClick", "switchSelected(this)")
-	fullPlanetDiv.AppendChild(planetWrapperDiv)
+
+	nameRow := doc.CreateElement("div")
+	nameRow.Class().SetString("planetNameRow")
+	planetWrapperDiv.AppendChild(nameRow)
 
 	nameDiv := doc.CreateElement("div")
 	nameDiv.Class().SetString("planetName")
 	nameDiv.SetInnerHTML(p.Name)
-	planetWrapperDiv.AppendChild(nameDiv)
+	nameRow.AppendChild(nameDiv)
+
+	editimg := doc.CreateElement("img")
+	editimg.Class().SetString("editImage")
+	editimg.SetAttribute("src", "img/pencil-square-o.svg")
+	editimg.SetAttribute("onclick", fmt.Sprintf("editPlanet('%v', event);", p.Name))
+	nameRow.AppendChild(editimg)
 
 	detailsDiv := doc.CreateElement("div")
 	detailsDiv.Class().SetString("planetDetails")
@@ -149,6 +200,7 @@ func generatePlanetDisplay(p planet) dom.Element {
 	marketVolDiv := doc.CreateElement("div")
 	marketVolDiv.SetInnerHTML(fmt.Sprintf("market cap: %v", p.market.total))
 	marketShareDiv := doc.CreateElement("div")
+	marketShareDiv.SetID("market_share")
 	marketShareDiv.SetInnerHTML(fmt.Sprintf("market share: %.2f%%", (float32(p.market.current) / float32(p.market.total) * 100)))
 	pointsDiv := doc.CreateElement("div")
 	pointsDiv.SetInnerHTML(fmt.Sprintf("points: %v", p.DomPoints))
@@ -157,16 +209,32 @@ func generatePlanetDisplay(p planet) dom.Element {
 	detailsDiv.AppendChild(pointsDiv)
 	detailsDiv.AppendChild(marketShareDiv)
 
+	return planetWrapperDiv
+}
+
+func genPlanetMarket(doc dom.Document, p planet) dom.Element {
+
 	marketDiv := doc.CreateElement("div")
 	marketDiv.Class().SetString("planetMarket")
-	fullPlanetDiv.AppendChild(marketDiv)
 
-	for _, prod := range p.ProductList {
-		prodDiv := doc.CreateElement("div")
-		prodDiv.SetInnerHTML(fmt.Sprintf("%v: %v/%v", prod.name, prod.Supply, prod.Demand))
-		marketDiv.AppendChild(prodDiv)
+	// want to order this correctly.. similar to addPlanetForm
+	// this won't be exact, since not all items will be in the list
+	// but at least it will try to keep it consistent
+
+	for _, prodId := range productList {
+		if prod, exist := p.ProductList[prodId]; exist {
+			prodDiv := doc.CreateElement("div")
+			prodDiv.SetID(prod.ID())
+			prodDiv.SetInnerHTML(fmt.Sprintf("%v: %v/%v", prod.name, prod.Supply, prod.Demand))
+			marketDiv.AppendChild(prodDiv)
+		}
 	}
 
+	return marketDiv
+
+}
+
+func genPlanetCatMarket(doc dom.Document, p planet) dom.Element {
 	categoryDiv := doc.CreateElement("div")
 	categoryDiv.Class().SetString("planetCategoryMarket")
 	// var (
@@ -200,9 +268,9 @@ func generatePlanetDisplay(p planet) dom.Element {
 		}
 	}
 	// maxEl.Class().Add("highlight")
-	fullPlanetDiv.AppendChild(categoryDiv)
 
-	return fullPlanetDiv
+	return categoryDiv
+
 }
 
 func onSelected(newSel string) any {

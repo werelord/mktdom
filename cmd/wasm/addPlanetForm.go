@@ -9,6 +9,11 @@ import (
 	"honnef.co/go/js/dom/v2"
 )
 
+func showAddPlanet(planetStr string) any {
+	fmt.Println("todo: " + planetStr)
+	return nil
+}
+
 func genPlanetForm() any {
 	// fmt.Println("in genPlanetForm()")
 
@@ -90,7 +95,7 @@ func genPlanetForm() any {
 	return nil
 }
 
-func addPlanet() any {
+func onAddPlanet() any {
 
 	doc := dom.GetWindow().Document()
 	var newPlanet planet

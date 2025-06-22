@@ -13,22 +13,72 @@
     <div class="navMenu">
         <button class="addPlanetButton" value="Add Planet" onclick="showAddPlanet()">Add Planet</button>
     </div>
-    <div id="errorText" class="errorText">this is hidden</div>
+        <div id="errorText" class="errorText">this is hidden</div>
+    </div>
     <div class="toplevel">
 
         <div id="planetList" class="planetContainer" data-tag="planetList">
-            <div class="fullPlanetDetails" onclick="switchSelected('ff')">
+
+            <div class="fullPlanetDetails">
+                <div class="planetInfoHeader">Planet Information</div>
+                <div class="planetMarketHeader">Products (my amt / total amt)</div>
+                <div class="planetCategoryMarketHeader">Category (my share / opp share %)</div>
+            </div>
+
+            <div class="fullPlanetDetails">
+                <div id="aa" class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">aa</div>
+                        <!-- <img class="editImage" src="img/pencil-square-o.svg" onclick="return false" /> -->
+                    </div>
+                    <div class="planetDetails">
+                        <div>sector ff</div>
+                        <div>market cap: 238704</div>
+                        <div>points: 24</div>
+                        <div id="market_share">market share: 0.00%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div id="farmer_robot">Farmer Robot: 0/48</div>
+                    <div id="maitenance_drone">Maitenance Drone: 0/48</div>
+                    <div id="transport_bot">Transport Bot: 0/48</div>
+                    <div id="heavy_duty_transport_bot">Heavy Duty Transport Bot: 0/48</div>
+                    <div id="light_bot">Light Bot: 0/48</div>
+                    <div id="screen_bot">Screen Bot: 0/48</div>
+                    <div id="snack_bot">Snack Bot: 0/48</div>
+                    <div id="cleaning_bot">Cleaning Bot: 0/48</div>
+                    <div id="combat_drone">Combat Drone: 0/48</div>
+                    <div id="mining_drone">Mining Drone: 0/48</div>
+                    <div id="personal_assistant_robot">Personal Assistant Robot: 0/48</div>
+                    <div id="planter_drone">Planter Drone: 0/48</div>
+                    <div id="science_assistant_drone">Science Assistant Drone: 0/48</div>
+                    <div id="science_robot">Science Robot: 0/48</div>
+                    <div id="transport_drone">Transport Drone: 0/48</div>
+                    <div id="combat_robot">Combat Robot: 0/48</div>
+                    <div id="miner_robot">Miner Robot: 0/48</div>
+                    <div id="vaccuum_bot">Vaccuum Bot: 0/48</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Logistics">Logistics: 0.0 / 3.5%</div>
+                    <div id="Appliances">Appliances: 0.0 / 20.6%</div>
+                    <div id="Mining">Mining: 0.0 / 20.0%</div>
+                    <div id="Agriculture">Agriculture: 0.0 / 14.9%</div>
+                    <div id="Scientific">Scientific: 0.0 / 20.1%</div>
+                    <div id="Military">Military: 0.0 / 20.9%</div>
+                </div>
+            </div>
+            <div class="fullPlanetDetails">
                 <div id="ff" class="planetInfo">
                     <div class="planetName">ff</div>
                     <div class="planetDetails">
                         <div>sector dd</div>
                         <div>market cap: 10272</div>
                         <div>points: 33</div>
-                        <div>market share: 0.00%</div>
+                        <div id="market_share">market share: 0.00%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Transport Drone: 0/96</div>
+                    <div id="transport_drone">Transport Drone: 0/96</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 0.0 / 100.0%</div>
@@ -41,16 +91,16 @@
                         <div>sector sector 2</div>
                         <div>market cap: 5520</div>
                         <div>points: 42</div>
-                        <div>market share: 82.97%</div>
+                        <div id="market_share">market share: 82.97%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Miner Robot: 5/6</div>
-                    <div>Transport Bot: 4/6</div>
+                    <div id="miner_robot">Miner Robot: 5/6</div>
+                    <div id="transport_bot">Transport Bot: 4/6</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
-                    <div id="Mining">Mining: 83.3 / 16.7%</div>
+                    <div id="Logistics">Logistics: 1.4 / 0.7%</div>
+                    <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
             <div class="fullPlanetDetails" onclick="switchSelected('planet 32')">
@@ -60,16 +110,16 @@
                         <div>sector sector 3</div>
                         <div>market cap: 5520</div>
                         <div>points: 1337</div>
-                        <div>market share: 82.97%</div>
+                        <div id="market_share">market share: 82.97%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Miner Robot: 5/6</div>
-                    <div>Transport Bot: 4/6</div>
+                    <div id="miner_robot">Miner Robot: 5/6</div>
+                    <div id="transport_bot">Transport Bot: 4/6</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Mining">Mining: 83.3 / 16.7%</div>
-                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                    <div id="Logistics">Logistics: 1.4 / 0.7%</div>
+                    <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
             <div class="fullPlanetDetails" onclick="switchSelected('planet 331')">
@@ -79,16 +129,16 @@
                         <div>sector sector 1</div>
                         <div>market cap: 5520</div>
                         <div>points: 134</div>
-                        <div>market share: 82.97%</div>
+                        <div id="market_share">market share: 82.97%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Miner Robot: 5/6</div>
-                    <div>Transport Bot: 4/6</div>
+                    <div id="transport_bot">Transport Bot: 4/6</div>
+                    <div id="miner_robot">Miner Robot: 5/6</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Mining">Mining: 83.3 / 16.7%</div>
-                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                    <div id="Logistics">Logistics: 1.4 / 0.7%</div>
+                    <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
             <div class="fullPlanetDetails" onclick="switchSelected('planet 4')">
@@ -98,16 +148,16 @@
                         <div>sector sector 1</div>
                         <div>market cap: 5520</div>
                         <div>points: 134</div>
-                        <div>market share: 82.97%</div>
+                        <div id="market_share">market share: 82.97%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Miner Robot: 5/6</div>
-                    <div>Transport Bot: 4/6</div>
+                    <div id="miner_robot">Miner Robot: 5/6</div>
+                    <div id="transport_bot">Transport Bot: 4/6</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
-                    <div id="Mining">Mining: 83.3 / 16.7%</div>
+                    <div id="Logistics">Logistics: 1.4 / 0.7%</div>
+                    <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
             <div class="fullPlanetDetails" onclick="switchSelected('planet 5')">
@@ -117,16 +167,16 @@
                         <div>sector sector 2</div>
                         <div>market cap: 5520</div>
                         <div>points: 42</div>
-                        <div>market share: 82.97%</div>
+                        <div id="market_share">market share: 82.97%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Transport Bot: 4/6</div>
-                    <div>Miner Robot: 5/6</div>
+                    <div id="miner_robot">Miner Robot: 5/6</div>
+                    <div id="transport_bot">Transport Bot: 4/6</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Mining">Mining: 83.3 / 16.7%</div>
-                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                    <div id="Logistics">Logistics: 1.4 / 0.7%</div>
+                    <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
             <div class="fullPlanetDetails" onclick="switchSelected('planet6')">
@@ -136,69 +186,69 @@
                         <div>sector sector 3</div>
                         <div>market cap: 5520</div>
                         <div>points: 1337</div>
-                        <div>market share: 82.97%</div>
+                        <div id="market_share">market share: 82.97%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Transport Bot: 4/6</div>
-                    <div>Miner Robot: 5/6</div>
+                    <div id="miner_robot">Miner Robot: 5/6</div>
+                    <div id="transport_bot">Transport Bot: 4/6</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Mining">Mining: 83.3 / 16.7%</div>
-                    <div id="Logistics">Logistics: 66.7 / 33.3%</div>
+                    <div id="Logistics">Logistics: 1.4 / 0.7%</div>
+                    <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails" onclick="switchSelected('sdf')">
+            <div class="fullPlanetDetails">
                 <div id="sdf" class="planetInfo">
                     <div class="planetName">sdf</div>
                     <div class="planetDetails">
                         <div>sector dd</div>
                         <div>market cap: 10272</div>
                         <div>points: 55</div>
-                        <div>market share: 0.00%</div>
+                        <div id="market_share">market share: 0.00%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Transport Drone: 0/96</div>
+                    <div id="transport_drone">Transport Drone: 0/96</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 0.0 / 100.0%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails" onclick="switchSelected('sdfsd')">
+            <div class="fullPlanetDetails">
                 <div id="sdfsd" class="planetInfo">
                     <div class="planetName">sdfsd</div>
                     <div class="planetDetails">
                         <div>sector ddd</div>
                         <div>market cap: 77856</div>
                         <div>points: 454</div>
-                        <div>market share: 0.00%</div>
+                        <div id="market_share">market share: 0.00%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Science Assistant Drone: 0/48</div>
-                    <div>Transport Bot: 0/48</div>
-                    <div>Heavy Duty Transport Bot: 0/96</div>
-                    <div>Personal Assistant Robot: 0/96</div>
+                    <div id="heavy_duty_transport_bot">Heavy Duty Transport Bot: 0/96</div>
+                    <div id="personal_assistant_robot">Personal Assistant Robot: 0/96</div>
+                    <div id="science_assistant_drone">Science Assistant Drone: 0/48</div>
+                    <div id="transport_bot">Transport Bot: 0/48</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Appliances">Appliances: 0.0 / 100.0%</div>
-                    <div id="Scientific">Scientific: 0.0 / 100.0%</div>
-                    <div id="Logistics">Logistics: 0.0 / 100.0%</div>
+                    <div id="Logistics">Logistics: 0.0 / 7.0%</div>
+                    <div id="Appliances">Appliances: 0.0 / 86.3%</div>
+                    <div id="Scientific">Scientific: 0.0 / 6.7%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails" onclick="switchSelected('sds')">
+            <div class="fullPlanetDetails">
                 <div id="sds" class="planetInfo">
                     <div class="planetName">sds</div>
                     <div class="planetDetails">
                         <div>sector d</div>
                         <div>market cap: 15408</div>
                         <div>points: 44</div>
-                        <div>market share: 0.00%</div>
+                        <div id="market_share">market share: 0.00%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div>Transport Drone: 0/144</div>
+                    <div id="transport_drone">Transport Drone: 0/144</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 0.0 / 100.0%</div>
@@ -264,10 +314,10 @@
             </div>
             <div class="addPlanetFormRow">
                 <label></label>
-                <button class="addPlanetButton" onclick="addPlanet();">Add Planet</button>
+                <button class="addPlanetButton" onclick="onAddPlanet();">Add Planet</button>
                 <label></label>
                 <button class="addPlanetButton" onclick="cancelAddPlanet();"
-                    style="background-color: red;">Done</button>
+                    style="background-color: red;">Cancel</button>
             </div>
         </div>
     </div>

@@ -58,15 +58,16 @@ function clearErrTxt() {
     errtxt.classList.remove("show")
 }
 
-function addPlanet() {
+function onAddPlanet() {
     console.log("in add planet")
-    if (handleResult(goAddPlanet())) {
+    if (handleResult(goOnAddPlanet())) {
         clearAddPlanet()
     }
 }
 
 
 function showAddPlanet() {
+    handleResult(goShowAddPlanet(""))
     f = document.getElementById("addPlanetForm")
     if ( f.classList.contains("hidden")) {
         f.classList.remove("hidden")
@@ -78,7 +79,6 @@ function cancelAddPlanet () {
 
     clearAddPlanet()
     clearErrTxt()
-    goGenPlanetForm()
     f.classList.add("hidden")
 }
 
@@ -88,4 +88,12 @@ function clearAddPlanet() {
     document.getElementById("addPlanetName").value = ""
     document.getElementById("addPlanetSector").value = ""
     document.getElementById("addPlanetPoints").value = ""
+}
+
+function editPlanet(planet, event) {
+    // console.log("edit planet " + planet)
+    // console.log("event " + event)
+    handleResult(goShowAddPlanet(planet))
+    event.stopPropagation()
+
 }

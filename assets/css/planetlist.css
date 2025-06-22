@@ -2,6 +2,10 @@
     font-family: serif;
 }
 
+.navMenu {
+    /* position: fixed; */
+}
+
 .errorText {
     font-size: 20px;
     color: red;
@@ -44,19 +48,46 @@
     /* width: 33%; */
 }
 
+.planetInfoHeader {
+    width: 25%;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
 .planetInfo {
-    width: 30%
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+}
+
+.planetNameRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex: auto 0;
 }
 
 .planetName {
-    display: flex;
-    flex-direction: column;
     /* background-color: #f1f1f1; */
     /* border: 1px solid black; */
     /* width: 100%; */
-    padding: 3px;
+    /* padding: 3px; */
+    /* width: 100%; */
+    
+    width: 100%;
     font-size: 20px;
     text-align: center;
+}
+
+.editImage {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 85.5%;
+    z-index: 4;
+    /* flex-basis: 0; */
+    /* padding-right: 0px; */
+    /* align-self: 100px; */
 }
 
 .planetDetails {
@@ -74,6 +105,14 @@
     text-align: center;
 }
 
+.planetMarketHeader {
+    width: 45%;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    padding: 3px;
+}
+
 .planetMarket {
     display: grid;
     grid-template-columns: auto auto;
@@ -81,7 +120,15 @@
     text-align: right;
     padding: 3px;
     font-size: 12px;
-    width: 40%;
+    width: 45%;
+}
+
+.planetCategoryMarketHeader {
+    width: 30%;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    padding: 3px;
 }
 
 .planetCategoryMarket {

@@ -1,6 +1,6 @@
 package main
 
-func temploadStoredPlanetData() {
+/* func temploadStoredPlanetData() {
 	tb := baseProductMap["transport_bot"]
 	tb.Supply, tb.Demand = 4, 6
 	mr := baseProductMap["miner_robot"]
@@ -44,3 +44,4 @@ func temploadStoredPlanetData() {
 	planetMap[p6.Name] = &p6
 
 }
+*/
