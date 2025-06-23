@@ -23,8 +23,12 @@ func main() {
 		return onSelected(args[0].String())
 	}))
 	js.Global().Set("goOnAddPlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
-		return onAddPlanet()
+		return onAddPlanet(false)
 	}))
+	js.Global().Set("goOnSavePlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
+		return onAddPlanet(true)
+	}))
+
 	js.Global().Set("goShowAddPlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
 		if len(args) != 1 {
 			return sendErr("error in showing Add Planet form (wrong # of args)")
@@ -186,6 +190,7 @@ func genPlanetInfo(doc dom.Document, p planet) dom.Element {
 
 	editimg := doc.CreateElement("img")
 	editimg.Class().SetString("editImage")
+	editimg.Class().Add("hidden")
 	editimg.SetAttribute("src", "img/pencil-square-o.svg")
 	editimg.SetAttribute("onclick", fmt.Sprintf("editPlanet('%v', event);", p.Name))
 	nameRow.AppendChild(editimg)
@@ -282,7 +287,10 @@ func onSelected(newSel string) any {
 
 	if prevSel != "" {
 		var oldDiv = doc.GetElementByID(prevSel)
-		oldDiv.Class().Remove("selected")
+		if oldDiv != nil {
+			oldDiv.Class().Remove("selected")
+			oldDiv.QuerySelector(".editImage").Class().Add("hidden")
+		}
 	}
 
 	if newSel == prevSel {
@@ -291,6 +299,7 @@ func onSelected(newSel string) any {
 	} else {
 		var newDiv = doc.GetElementByID(newSel)
 		newDiv.Class().Add("selected")
+		newDiv.QuerySelector(".editImage").Class().Remove("hidden")
 		selected = newSel
 	}
 

@@ -65,6 +65,14 @@ function onAddPlanet() {
     }
 }
 
+function onSavePlanet() {
+    console.log("in save planet")
+    if (handleResult(goOnSavePlanet())) {
+        clearAddPlanet()
+        cancelAddPlanet()
+    }
+}
+
 
 function showAddPlanet() {
     handleResult(goShowAddPlanet(""))
@@ -82,14 +90,14 @@ function cancelAddPlanet () {
     f.classList.add("hidden")
 }
 
-// function clearAddPlanet() {
-//     // no reason to call into go for this
-//     f = document.getElementById("addPlanetForm")
+function clearAddPlanet() {
+    // no reason to call into go for this
+    f = document.getElementById("addPlanetForm")
 
-//     document.getElementById("addPlanetName").value = ""
-//     document.getElementById("addPlanetSector").value = ""
-//     document.getElementById("addPlanetPoints").value = ""
-// }
+    document.getElementById("addPlanetName").value = ""
+    document.getElementById("addPlanetSector").value = ""
+    document.getElementById("addPlanetPoints").value = ""
+}
 
 function editPlanet(planet, event) {
     // console.log("edit planet " + planet)
@@ -100,5 +108,4 @@ function editPlanet(planet, event) {
         f.classList.remove("hidden")
     }
     event.stopPropagation()
-
 }

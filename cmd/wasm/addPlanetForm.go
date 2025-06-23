@@ -30,7 +30,7 @@ func genPlanetForm(p planet) any {
 
 	doc := dom.GetWindow().Document()
 
-	// make sure the correct buttons are shown.. keying off the planet name being empy whether its a
+	// make sure the correct buttons are shown.. keying off the planet name being empty whether its a
 	// save or an add
 	addButton := doc.GetElementByID("addPlanetButton")
 	saveButton := doc.GetElementByID("savePlanetButton")
@@ -50,19 +50,22 @@ func genPlanetForm(p planet) any {
 
 	// reset everything
 	for _, child := range table.ChildNodes() {
-		// fmt.Printf("child %v - %v\n", child.NodeName(), child.NodeValue())
 		table.RemoveChild(child)
 	}
 
 	// add spacer row
 	hiddenrow := doc.CreateElement("tr")
 	hiddenrow.Class().SetString("hidden")
+	// save original name, just in case name changes
+	hiddenName := doc.CreateElement("td")
 	spacer1 := doc.CreateElement("td")
 	spacer2 := doc.CreateElement("td")
+	hiddenName.SetID("old_name")
+	hiddenName.SetInnerHTML(p.Name)
 	spacer1.SetInnerHTML("0000")
 	spacer2.SetInnerHTML("0000")
 
-	hiddenrow.AppendChild(doc.CreateElement("td"))
+	hiddenrow.AppendChild(hiddenName)
 	hiddenrow.AppendChild(doc.CreateElement("td"))
 	hiddenrow.AppendChild(spacer1)
 	hiddenrow.AppendChild(doc.CreateElement("td"))
@@ -130,18 +133,35 @@ func genPlanetForm(p planet) any {
 	return nil
 }
 
-func onAddPlanet() any {
+func onAddPlanet(overwrite bool) any {
+
+	// Add or Edit depends on overwrite
 
 	doc := dom.GetWindow().Document()
 	var newPlanet planet
 	newPlanet.ProductList = make(map[string]productType, 0)
 
+	var oldName = doc.GetElementByID("old_name").InnerHTML()
+	if overwrite && (oldName == "") {
+		return sendErr("Cannot save planet; cannot find old planet name")
+	}
+
 	if name := doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).Value(); name == "" {
 		return sendErr("Add Planet: name cannot be empty")
-	} else if _, exists := planetMap[name]; exists {
-		return sendErr(fmt.Sprintf("Add Planet: planet with name '%v' already exists", name))
 	} else {
-		// fmt.Println("name:" + nameEl.Value())
+
+		if overwrite {
+			// need to check the old name
+			if _, exists := planetMap[oldName]; !exists {
+				return sendErr(fmt.Sprintf("Unable to find planet entry for old name %v", oldName))
+			} else {
+				fmt.Printf("changing planet name from %v to %v\n", oldName, name)
+			}
+		} else {
+			if _, exists := planetMap[name]; exists {
+				return sendErr(fmt.Sprintf("Add Planet: planet with name '%v' already exists", name))
+			}
+		}
 		newPlanet.Name = name
 	}
 
@@ -188,14 +208,43 @@ func onAddPlanet() any {
 	// fmt.Printf("adding planet: %+v\n", newPlanet)
 
 	planetMap[newPlanet.Name] = &newPlanet
+	// make sure old planet is deleted if overwrite and names differ
+	if overwrite && (oldName != newPlanet.Name) {
+		delete(planetMap, oldName)
+		if selected == oldName {
+			selected = ""
+		}
+	}
 	if err := savePlanetData(); err != nil {
 		return sendErr(fmt.Sprintf("error saving planet data: %v", err))
 	}
 
+	/*
+		if overwrite remove old, insert new (ignore found)
+		if not overwrite, just insert
+	*/
+	if overwrite {
+		if err := removeFromDisplay(doc, &planet{Name: oldName}); err != nil {
+			return err
+		}
+	}
+
+	if err := insertIntoDisplay(doc, newPlanet); err != nil {
+		return err
+	} else {
+		var status = "added"
+		if overwrite {
+			status = "updated"
+		}
+
+		return sendToast(fmt.Sprintf("Planet \"%v\" %v", newPlanet.Name, status))
+	}
+}
+
+func insertIntoDisplay(doc dom.Document, newPlanet planet) any {
 	// do an insert, assuming sorted by name for now
 	i, found := slices.BinarySearchFunc(planetDisplay, &newPlanet, func(a, b *planet) int {
 		return strings.Compare(strings.ToLower(a.Name), strings.ToLower(b.Name))
-
 	})
 	if found {
 		// this shouldn't happen, name was already checked
@@ -221,8 +270,25 @@ func onAddPlanet() any {
 		befDiv := doc.GetElementByID(beforePlanet.Name)
 		pl.InsertBefore(newPlanetDiv, befDiv)
 	}
+	return nil
+}
 
-	return sendToast(fmt.Sprintf("Planet \"%v\" added", newPlanet.Name))
+func removeFromDisplay(doc dom.Document, remPlanet *planet) any {
+	if i, found := slices.BinarySearchFunc(planetDisplay, remPlanet, func(a, b *planet) int {
+		return strings.Compare(strings.ToLower(a.Name), strings.ToLower(b.Name))
+	}); !found {
+		return sendErr(fmt.Sprintf("unable to remove planet div '%v'; cannot find div!", remPlanet.Name))
+	} else {
+		// fmt.Printf("before %v\n", planetDisplay)
+		planetDisplay = append(planetDisplay[:i], planetDisplay[i+1:]...)
+		// fmt.Printf("after  %v\n", planetDisplay)
+	}
+
+	pl := doc.GetElementByID("planetList")
+	remDiv := doc.GetElementByID(fmt.Sprintf(remPlanet.Name))
+	pl.RemoveChild(remDiv)
+
+	return nil
 }
 
 func (p *planet) calcMarketVol() {
