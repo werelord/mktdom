@@ -16,7 +16,7 @@ func showAddPlanet(planetStr string) any {
 	if planetStr != "" {
 		// load planet for editing
 		if p, exists := planetMap[planetStr]; exists == false {
-			return sendErr(fmt.Sprintf("error showing form; planet '%v' does not exist", planetStr))
+			return sendErr("error showing form; planet '%v' does not exist", planetStr)
 		} else {
 			pl = *p
 		}
@@ -34,12 +34,15 @@ func genPlanetForm(p planet) any {
 	// save or an add
 	addButton := doc.GetElementByID("addPlanetButton")
 	saveButton := doc.GetElementByID("savePlanetButton")
+	deleteButton := doc.GetElementByID("deletePlanetButton")
 	if p.Name == "" {
 		addButton.Class().Remove("displayNone")
 		saveButton.Class().Add("displayNone")
+		deleteButton.Class().Add("displayNone")
 	} else {
 		addButton.Class().Add("displayNone")
 		saveButton.Class().Remove("displayNone")
+		deleteButton.Class().Remove("displayNone")
 	}
 
 	doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).SetValue(p.Name)
@@ -114,7 +117,6 @@ func genPlanetForm(p planet) any {
 		plus.SetInnerHTML("+")
 		pbntd.AppendChild(plus)
 		root.AppendChild(pbntd)
-
 	}
 
 	for i := 0; i < len(productList); i = i + 2 {
@@ -143,7 +145,7 @@ func onAddPlanet(overwrite bool) any {
 
 	var oldName = doc.GetElementByID("old_name").InnerHTML()
 	if overwrite && (oldName == "") {
-		return sendErr("Cannot save planet; cannot find old planet name")
+		return sendErr("Cannot save planet; cannot planet with name %v", oldName)
 	}
 
 	if name := doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).Value(); name == "" {
@@ -153,13 +155,13 @@ func onAddPlanet(overwrite bool) any {
 		if overwrite {
 			// need to check the old name
 			if _, exists := planetMap[oldName]; !exists {
-				return sendErr(fmt.Sprintf("Unable to find planet entry for old name %v", oldName))
+				return sendErr("Unable to find planet entry for old name %v", oldName)
 			} else {
 				fmt.Printf("changing planet name from %v to %v\n", oldName, name)
 			}
 		} else {
 			if _, exists := planetMap[name]; exists {
-				return sendErr(fmt.Sprintf("Add Planet: planet with name '%v' already exists", name))
+				return sendErr("Add Planet: planet with name '%v' already exists", name)
 			}
 		}
 		newPlanet.Name = name
@@ -216,7 +218,7 @@ func onAddPlanet(overwrite bool) any {
 		}
 	}
 	if err := savePlanetData(); err != nil {
-		return sendErr(fmt.Sprintf("error saving planet data: %v", err))
+		return sendErr("error saving planet data: %v", err)
 	}
 
 	/*
@@ -237,8 +239,37 @@ func onAddPlanet(overwrite bool) any {
 			status = "updated"
 		}
 
-		return sendToast(fmt.Sprintf("Planet \"%v\" %v", newPlanet.Name, status))
+		return sendToast("Planet \"%v\" %v", newPlanet.Name, status)
 	}
+}
+
+func onDeletePlanet() any {
+
+	// fmt.Println("onDeletePlanet()")
+	// confirmation should already have happened
+
+	// look in the form for the hidden name that was used; can't use text box (may have been edited)
+	// or current selection (may have changed)
+
+	var (
+		doc     = dom.GetWindow().Document()
+		oldName = doc.GetElementByID("old_name").InnerHTML()
+	)
+
+	if oldName == "" {
+		return sendErr("planet name is empty (something is wrong); cannot delete planet")
+	} else if planet, exists := planetMap[oldName]; !exists {
+		return sendErr("unable to find planet with name %v", oldName)
+	} else {
+		delete(planetMap, oldName)
+
+		if err := savePlanetData(); err != nil {
+			return sendErr("error in saving data: %v", err)
+		}
+		removeFromDisplay(doc, planet)
+		return sendToast("Successfully deleted planet '%v'", oldName)
+	}
+
 }
 
 func insertIntoDisplay(doc dom.Document, newPlanet planet) any {
@@ -277,7 +308,7 @@ func removeFromDisplay(doc dom.Document, remPlanet *planet) any {
 	if i, found := slices.BinarySearchFunc(planetDisplay, remPlanet, func(a, b *planet) int {
 		return strings.Compare(strings.ToLower(a.Name), strings.ToLower(b.Name))
 	}); !found {
-		return sendErr(fmt.Sprintf("unable to remove planet div '%v'; cannot find div!", remPlanet.Name))
+		return sendErr("unable to remove planet div '%v'; cannot find div!", remPlanet.Name)
 	} else {
 		// fmt.Printf("before %v\n", planetDisplay)
 		planetDisplay = append(planetDisplay[:i], planetDisplay[i+1:]...)

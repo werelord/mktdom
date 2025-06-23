@@ -4,7 +4,7 @@ import "strings"
 
 type categoryType int
 
-const (	// ordered by tab order in finances
+const ( // ordered by tab order in finances
 	Logistics categoryType = iota
 	Appliances
 	Mining
@@ -137,7 +137,7 @@ type planet struct {
 // }
 
 var (
-	planetMap = make(map[string]*planet, 0)
+	planetMap     = make(map[string]*planet, 0)
 	planetDisplay []*planet
-	selected string
+	selected      string
 )

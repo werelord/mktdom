@@ -28,7 +28,9 @@ func main() {
 	js.Global().Set("goOnSavePlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
 		return onAddPlanet(true)
 	}))
-
+	js.Global().Set("goOnDeletePlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
+		return onDeletePlanet()
+	}))
 	js.Global().Set("goShowAddPlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
 		if len(args) != 1 {
 			return sendErr("error in showing Add Planet form (wrong # of args)")
@@ -38,16 +40,16 @@ func main() {
 
 	<-make(chan struct{})
 }
-func sendErr(val string) map[string]any {
+func sendErr(f string, val ...any) map[string]any {
 	res := map[string]any{
-		"error": val,
+		"error": fmt.Sprintf(f, val...),
 	}
 	return res
 }
 
-func sendToast(t string) map[string]any {
+func sendToast(t string, val ...any) map[string]any {
 	res := map[string]any{
-		"toast": t,
+		"toast": fmt.Sprintf(t, val...),
 	}
 	return res
 }

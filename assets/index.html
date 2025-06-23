@@ -9,9 +9,14 @@
 
 <body>
     <div id="mtoast"></div>
-    <!-- <div><button onclick="showToast('this is a test')">Test toast</button></div> -->
+    <!-- <div><button onclick="window.confirmDelete.showModal()">Test dialog</button></div> -->
+    <dialog id="confirmDelete">
+        <div style="text-align: center;">Delete planet; are you sure?</div>
+        <button class="addPlanetFormButton red" onclick="onDeletePlanet();window.confirmDelete.close();">Delete</button>
+        <button class="addPlanetFormButton red" onclick="window.confirmDelete.close();">Cancel</button>
+    </dialog>
     <div class="navMenu">
-        <button class="addPlanetButton" onclick="showAddPlanet()">Add Planet</button>
+        <button class="addPlanetFormButton" onclick="showAddPlanet()">Add Planet</button>
     </div>
     <div id="errorText" class="errorText">this is hidden</div>
     </div>
@@ -387,11 +392,11 @@
             </div>
             <div class="addPlanetFormRow">
                 <!-- <label></label> -->
-                <button id="addPlanetButton" class="addPlanetButton" onclick="onAddPlanet();">Add Planet</button>
-                <button id="savePlanetButton" class="addPlanetButton displayNone" onclick="onSavePlanet();">Save Planet</button>
+                <button id="addPlanetButton" class="addPlanetFormButton" onclick="onAddPlanet();">Add Planet</button>
+                <button id="savePlanetButton" class="addPlanetFormButton displayNone" onclick="onSavePlanet();">Save Planet</button>
                 <!-- <label></label> -->
-                <button class="addPlanetButton" onclick="cancelAddPlanet();"
-                    style="background-color: red;">Cancel</button>
+                <button class="addPlanetFormButton red" onclick="cancelAddPlanet();">Cancel</button>
+                <button id="deletePlanetButton" class="addPlanetFormButton red" onclick="window.confirmDelete.showModal();" style="margin-left: auto;">Delete</button>
             </div>
         </div>
 

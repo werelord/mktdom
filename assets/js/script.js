@@ -1,10 +1,10 @@
 
-function showToast (msg) {
+function showToast(msg) {
     var toast = document.getElementById("mtoast")
     toast.innerHTML = msg
     toast.classList.add("show")
 
-    setTimeout(function() { toast.className = toast.classList.remove("show"); }, 2500)
+    setTimeout(function () { toast.className = toast.classList.remove("show"); }, 2500)
 }
 
 function addAmount(el) {
@@ -14,9 +14,11 @@ function addAmount(el) {
 
 function subAmount(el) {
     var e = document.getElementById(el)
-    if (+e.innerHTML > 0) {
-        e.innerHTML = +e.innerHTML - 48
+    var amt = +e.innerHTML - 48
+    if (amt < 0) {
+        amt = 0
     }
+    e.innerHTML = amt
 }
 
 function switchSelected(el) {
@@ -73,16 +75,23 @@ function onSavePlanet() {
     }
 }
 
+function onDeletePlanet() {
+    // confirmation handled by dialog
+    console.log("in delete planet")
+    if (handleResult(goOnDeletePlanet())) {
+        clearAddPlanet()
+    }
+}
 
 function showAddPlanet() {
     handleResult(goShowAddPlanet(""))
     f = document.getElementById("addPlanetForm")
-    if ( f.classList.contains("hidden")) {
+    if (f.classList.contains("hidden")) {
         f.classList.remove("hidden")
     }
 }
 
-function cancelAddPlanet () {
+function cancelAddPlanet() {
     f = document.getElementById("addPlanetForm")
 
     // clearAddPlanet()
@@ -100,12 +109,11 @@ function clearAddPlanet() {
 }
 
 function editPlanet(planet, event) {
-    // console.log("edit planet " + planet)
-    // console.log("event " + event)
     handleResult(goShowAddPlanet(planet))
     f = document.getElementById("addPlanetForm")
-    if ( f.classList.contains("hidden")) {
+    if (f.classList.contains("hidden")) {
         f.classList.remove("hidden")
     }
     event.stopPropagation()
 }
+
