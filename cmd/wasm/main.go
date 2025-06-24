@@ -231,7 +231,7 @@ func genPlanetMarket(doc dom.Document, p planet) dom.Element {
 		if prod, exist := p.ProductList[prodId]; exist {
 			prodDiv := doc.CreateElement("div")
 			prodDiv.SetID(prod.ID())
-			prodDiv.SetInnerHTML(fmt.Sprintf("%v: %v/%v", prod.name, prod.Supply, prod.Demand))
+			prodDiv.SetInnerHTML(fmt.Sprintf("%v:  %v / %v", prod.name, prod.Supply, prod.Demand))
 			marketDiv.AppendChild(prodDiv)
 		}
 	}
@@ -288,7 +288,7 @@ func onSelected(newSel string) any {
 	)
 
 	if prevSel != "" {
-		var oldDiv = doc.GetElementByID(prevSel)
+		var oldDiv = doc.GetElementByID(prevSel).QuerySelector(".planetInfo")
 		if oldDiv != nil {
 			oldDiv.Class().Remove("selected")
 			oldDiv.QuerySelector(".editImage").Class().Add("hidden")
@@ -299,7 +299,7 @@ func onSelected(newSel string) any {
 		// same object, its just a deselect
 		selected = ""
 	} else {
-		var newDiv = doc.GetElementByID(newSel)
+		var newDiv = doc.GetElementByID(newSel).QuerySelector(".planetInfo")
 		newDiv.Class().Add("selected")
 		newDiv.QuerySelector(".editImage").Class().Remove("hidden")
 		selected = newSel
