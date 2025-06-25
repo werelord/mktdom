@@ -9,14 +9,15 @@
 </head>
 
 <body>
-    <div id="mtoast"></div>
-    <!-- <div><button onclick="window.confirmDelete.showModal()">Test dialog</button></div> -->
+    <div id="infoToast" class="toast"></div>
+    <div id="errToast" class="toast"></div>
     <dialog id="confirmDelete">
         <div style="text-align: center;">Delete planet; are you sure?</div>
         <button class="addPlanetFormButton red" onclick="onDeletePlanet();window.confirmDelete.close();">Delete</button>
         <button class="addPlanetFormButton red" onclick="window.confirmDelete.close();">Cancel</button>
     </dialog>
     <div class="navMenu">
+        <!-- <div><button onclick="showErrToast('this is a test')">Test toast</button></div> -->
         <button class="addPlanetFormButton" onclick="showAddPlanet()">Add Planet</button>
         <div id="errorText" class="errorText">this is hidden</div>
     </div>

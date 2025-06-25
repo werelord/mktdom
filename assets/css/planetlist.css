@@ -150,15 +150,12 @@
     background-color: yellow;
 }
 
-#mtoast {
+.toast {
     visibility: hidden;
     position: fixed;
-    /* min-width: 250px; */
     margin-left: -125px;
     height: 20px;
-    background-color: lightgreen;
     font-size: 20px;
-    /* box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.12); */
     text-align: center;
     border-radius:4px;
     padding: 16px;
@@ -168,7 +165,20 @@
     border: 1px solid black;
 }
 
-#mtoast.show {
+#infoToast {
+    background-color: lightgreen;
+}
+
+#infoToast.show {
+    visibility: visible;
+}
+
+#errToast {
+    color: white;
+    background-color: red;
+}
+
+#errToast.show {
     visibility: visible;
 }
 

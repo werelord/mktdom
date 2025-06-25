@@ -1,10 +1,18 @@
 
-function showToast(msg) {
-    var toast = document.getElementById("mtoast")
+function showInfoToast(msg) {
+    var toast = document.getElementById("infoToast")
     toast.innerHTML = msg
     toast.classList.add("show")
 
-    setTimeout(function () { toast.className = toast.classList.remove("show"); }, 2500)
+    setTimeout(function () { toast.classList.remove("show"); }, 2500)
+}
+
+function showErrToast(msg) {
+    var toast = document.getElementById("errToast")
+    toast.innerHTML = msg
+    toast.classList.add("show")
+
+    setTimeout(function () { toast.classList.remove("show"); }, 2500)
 }
 
 function addAmount(el) {
@@ -45,10 +53,11 @@ function handleResult(result) {
             console.log("error encocuntered:", result.error)
             errtxt.innerHTML = result.error
             errtxt.classList.add("show")
+            showErrToast(result.error)
         } else if ('toast' in result) {
             // make sure any errors are cleared
             errtxt.classList.remove("show")
-            showToast(result.toast)
+            showInfoToast(result.toast)
             return true
         }
     }
