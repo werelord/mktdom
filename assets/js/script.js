@@ -86,8 +86,8 @@ function onDeletePlanet() {
 function showAddPlanet() {
     handleResult(goShowAddPlanet(""))
     f = document.getElementById("addPlanetForm")
-    if (f.classList.contains("hidden")) {
-        f.classList.remove("hidden")
+    if (f.classList.contains("displayNone")) {
+        f.classList.remove("displayNone")
     }
 }
 
@@ -96,7 +96,7 @@ function cancelAddPlanet() {
 
     // clearAddPlanet()
     clearErrTxt()
-    f.classList.add("hidden")
+    f.classList.add("displayNone")
 }
 
 function clearAddPlanet() {
@@ -111,9 +111,11 @@ function clearAddPlanet() {
 function editPlanet(planet, event) {
     handleResult(goShowAddPlanet(planet))
     f = document.getElementById("addPlanetForm")
-    if (f.classList.contains("hidden")) {
-        f.classList.remove("hidden")
+    if (f.classList.contains("displayNone")) {
+        f.classList.remove("displayNone")
     }
     event.stopPropagation()
 }
-
+function changeSupply(op, planet, product) {
+    handleResult(goOnChangeSupply(op, planet, product))
+}

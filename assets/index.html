@@ -4,6 +4,7 @@
 <head>
     <link rel="stylesheet" href="css/planetlist.css">
     <link rel="stylesheet" href="css/addplanetform.css">
+    <link rel="stylesheet" href="css/supplyform.css">
     <meta charset="utf-8" />
 </head>
 
@@ -17,24 +18,41 @@
     </dialog>
     <div class="navMenu">
         <button class="addPlanetFormButton" onclick="showAddPlanet()">Add Planet</button>
-    </div>
-    <div id="errorText" class="errorText">this is hidden</div>
+        <div id="errorText" class="errorText">this is hidden</div>
     </div>
     <div class="toplevel">
 
         <div id="planetList" class="planetContainer" data-tag="planetList">
-
             <div class="fullPlanetDetails">
                 <div class="planetInfoHeader">Planet Information</div>
                 <div class="planetMarketHeader">Products (my amt / total amt)</div>
                 <div class="planetCategoryMarketHeader">Category (my share / opp share %)</div>
             </div>
-
-            <div class="fullPlanetDetails">
-                <div id="aa" class="planetInfo">
+            <div id="3525dd" class="fullPlanetDetails" onclick="switchSelected('3525dd')">
+                <div class="planetInfo">
                     <div class="planetNameRow">
-                        <div class="planetName">aa</div>
-                        <!-- <img class="editImage" src="img/pencil-square-o.svg" onclick="return false" /> -->
+                        <div class="planetName">3525dd</div><img class="editImage hidden" src="img/pencil-square-o.svg"
+                            onclick="editPlanet('3525dd', event);">
+                    </div>
+                    <div class="planetDetails">
+                        <div>sector dd</div>
+                        <div>market cap: 13536</div>
+                        <div>points: 35</div>
+                        <div id="market_share">market share: 0.00%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div id="heavy_duty_transport_bot">Heavy Duty Transport Bot: 0 / 288</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Logistics">Logistics: 0.0 / 100.0%</div>
+                </div>
+            </div>
+            <div id="aa" class="fullPlanetDetails" onclick="switchSelected('aa')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">aa</div><img class="editImage hidden" src="img/pencil-square-o.svg"
+                            onclick="editPlanet('aa', event);">
                     </div>
                     <div class="planetDetails">
                         <div>sector ff</div>
@@ -44,24 +62,24 @@
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="farmer_robot">Farmer Robot: 0/48</div>
-                    <div id="maitenance_drone">Maitenance Drone: 0/48</div>
-                    <div id="transport_bot">Transport Bot: 0/48</div>
-                    <div id="heavy_duty_transport_bot">Heavy Duty Transport Bot: 0/48</div>
-                    <div id="light_bot">Light Bot: 0/48</div>
-                    <div id="screen_bot">Screen Bot: 0/48</div>
-                    <div id="snack_bot">Snack Bot: 0/48</div>
-                    <div id="cleaning_bot">Cleaning Bot: 0/48</div>
-                    <div id="combat_drone">Combat Drone: 0/48</div>
-                    <div id="mining_drone">Mining Drone: 0/48</div>
-                    <div id="personal_assistant_robot">Personal Assistant Robot: 0/48</div>
-                    <div id="planter_drone">Planter Drone: 0/48</div>
-                    <div id="science_assistant_drone">Science Assistant Drone: 0/48</div>
-                    <div id="science_robot">Science Robot: 0/48</div>
-                    <div id="transport_drone">Transport Drone: 0/48</div>
-                    <div id="combat_robot">Combat Robot: 0/48</div>
-                    <div id="miner_robot">Miner Robot: 0/48</div>
-                    <div id="vaccuum_bot">Vaccuum Bot: 0/48</div>
+                    <div id="transport_bot">Transport Bot: 0 / 48</div>
+                    <div id="maitenance_drone">Maitenance Drone: 0 / 48</div>
+                    <div id="heavy_duty_transport_bot">Heavy Duty Transport Bot: 0 / 48</div>
+                    <div id="vaccuum_bot">Vaccuum Bot: 0 / 48</div>
+                    <div id="transport_drone">Transport Drone: 0 / 48</div>
+                    <div id="cleaning_bot">Cleaning Bot: 0 / 48</div>
+                    <div id="mining_drone">Mining Drone: 0 / 48</div>
+                    <div id="light_bot">Light Bot: 0 / 48</div>
+                    <div id="miner_robot">Miner Robot: 0 / 48</div>
+                    <div id="screen_bot">Screen Bot: 0 / 48</div>
+                    <div id="planter_drone">Planter Drone: 0 / 48</div>
+                    <div id="snack_bot">Snack Bot: 0 / 48</div>
+                    <div id="farmer_robot">Farmer Robot: 0 / 48</div>
+                    <div id="personal_assistant_robot">Personal Assistant Robot: 0 / 48</div>
+                    <div id="science_assistant_drone">Science Assistant Drone: 0 / 48</div>
+                    <div id="combat_drone">Combat Drone: 0 / 48</div>
+                    <div id="science_robot">Science Robot: 0 / 48</div>
+                    <div id="combat_robot">Combat Robot: 0 / 48</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 0.0 / 3.5%</div>
@@ -72,64 +90,103 @@
                     <div id="Military">Military: 0.0 / 20.9%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails">
-                <div id="ff" class="planetInfo">
-                    <div class="planetName">ff</div>
+            <div id="ff" class="fullPlanetDetails" onclick="switchSelected('ff')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">ff</div><img class="editImage hidden" src="img/pencil-square-o.svg"
+                            onclick="editPlanet('ff', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector dd</div>
-                        <div>market cap: 10272</div>
+                        <div>market cap: 101232</div>
                         <div>points: 33</div>
                         <div id="market_share">market share: 0.00%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="transport_drone">Transport Drone: 0/96</div>
+                    <div id="transport_drone">Transport Drone: 0 / 96</div>
+                    <div id="mining_drone">Mining Drone: 0 / 48</div>
+                    <div id="miner_robot">Miner Robot: 0 / 96</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Logistics">Logistics: 0.0 / 100.0%</div>
+                    <div id="Logistics">Logistics: 0.0 / 10.2%</div>
+                    <div id="Mining">Mining: 0.0 / 89.8%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails" onclick="switchSelected('planet 2')">
-                <div id="planet 2" class="planetInfo">
-                    <div class="planetName">planet 2</div>
+            <div id="gsdfgh" class="fullPlanetDetails" onclick="switchSelected('gsdfgh')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">gsdfgh</div><img class="editImage hidden" src="img/pencil-square-o.svg"
+                            onclick="editPlanet('gsdfgh', event);">
+                    </div>
+                    <div class="planetDetails">
+                        <div>sector 333</div>
+                        <div>market cap: 12480</div>
+                        <div>points: 55</div>
+                        <div id="market_share">market share: 0.00%</div>
+                    </div>
+                </div>
+                <div class="planetMarket">
+                    <div id="heavy_duty_transport_bot">Heavy Duty Transport Bot: 0 / 96</div>
+                    <div id="vaccuum_bot">Vaccuum Bot: 0 / 96</div>
+                    <div id="planter_drone">Planter Drone: 0 / 96</div>
+                </div>
+                <div class="planetCategoryMarket">
+                    <div id="Logistics">Logistics: 0.0 / 36.1%</div>
+                    <div id="Appliances">Appliances: 0.0 / 15.4%</div>
+                    <div id="Agriculture">Agriculture: 0.0 / 48.5%</div>
+                </div>
+            </div>
+            <div id="planet 2" class="fullPlanetDetails" onclick="switchSelected('planet 2')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">planet 2</div><img class="editImage hidden"
+                            src="img/pencil-square-o.svg" onclick="editPlanet('planet 2', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector sector 2</div>
-                        <div>market cap: 5520</div>
+                        <div>market cap: 44160</div>
                         <div>points: 42</div>
-                        <div id="market_share">market share: 82.97%</div>
+                        <div id="market_share">market share: 0.00%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="miner_robot">Miner Robot: 5/6</div>
-                    <div id="transport_bot">Transport Bot: 4/6</div>
+                    <div id="transport_bot">Transport Bot: 0 / 48</div>
+                    <div id="miner_robot">Miner Robot: 0 / 48</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Logistics">Logistics: 1.4 / 0.7%</div>
-                    <div id="Mining">Mining: 81.5 / 16.3%</div>
+                    <div id="Logistics">Logistics: 0.0 / 2.2%</div>
+                    <div id="Mining">Mining: 0.0 / 97.8%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails" onclick="switchSelected('planet 32')">
-                <div id="planet 32" class="planetInfo">
-                    <div class="planetName">planet 32</div>
+            <div id="planet 32" class="fullPlanetDetails" onclick="switchSelected('planet 32')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">planet 32</div><img class="editImage hidden"
+                            src="img/pencil-square-o.svg" onclick="editPlanet('planet 32', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector sector 3</div>
-                        <div>market cap: 5520</div>
+                        <div>market cap: 44160</div>
                         <div>points: 1337</div>
-                        <div id="market_share">market share: 82.97%</div>
+                        <div id="market_share">market share: 0.00%</div>
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="miner_robot">Miner Robot: 5/6</div>
-                    <div id="transport_bot">Transport Bot: 4/6</div>
+                    <div id="transport_bot">Transport Bot: 0 / 48</div>
+                    <div id="miner_robot">Miner Robot: 0 / 48</div>
                 </div>
                 <div class="planetCategoryMarket">
-                    <div id="Logistics">Logistics: 1.4 / 0.7%</div>
-                    <div id="Mining">Mining: 81.5 / 16.3%</div>
+                    <div id="Logistics">Logistics: 0.0 / 2.2%</div>
+                    <div id="Mining">Mining: 0.0 / 97.8%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails" onclick="switchSelected('planet 331')">
-                <div id="planet 331" class="planetInfo">
-                    <div class="planetName">planet 331</div>
+            <div id="planet 331" class="fullPlanetDetails" onclick="switchSelected('planet 331')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">planet 331</div><img class="editImage hidden"
+                            src="img/pencil-square-o.svg" onclick="editPlanet('planet 331', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector sector 1</div>
                         <div>market cap: 5520</div>
@@ -138,17 +195,20 @@
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="transport_bot">Transport Bot: 4/6</div>
-                    <div id="miner_robot">Miner Robot: 5/6</div>
+                    <div id="transport_bot">Transport Bot: 4 / 6</div>
+                    <div id="miner_robot">Miner Robot: 5 / 6</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 1.4 / 0.7%</div>
                     <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails" onclick="switchSelected('planet 4')">
-                <div id="planet 4" class="planetInfo">
-                    <div class="planetName">planet 4</div>
+            <div id="planet 4" class="fullPlanetDetails" onclick="switchSelected('planet 4')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">planet 4</div><img class="editImage hidden"
+                            src="img/pencil-square-o.svg" onclick="editPlanet('planet 4', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector sector 1</div>
                         <div>market cap: 5520</div>
@@ -157,17 +217,20 @@
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="miner_robot">Miner Robot: 5/6</div>
-                    <div id="transport_bot">Transport Bot: 4/6</div>
+                    <div id="transport_bot">Transport Bot: 4 / 6</div>
+                    <div id="miner_robot">Miner Robot: 5 / 6</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 1.4 / 0.7%</div>
                     <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails" onclick="switchSelected('planet 5')">
-                <div id="planet 5" class="planetInfo">
-                    <div class="planetName">planet 5</div>
+            <div id="planet 5" class="fullPlanetDetails" onclick="switchSelected('planet 5')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">planet 5</div><img class="editImage hidden"
+                            src="img/pencil-square-o.svg" onclick="editPlanet('planet 5', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector sector 2</div>
                         <div>market cap: 5520</div>
@@ -176,17 +239,20 @@
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="miner_robot">Miner Robot: 5/6</div>
-                    <div id="transport_bot">Transport Bot: 4/6</div>
+                    <div id="transport_bot">Transport Bot: 4 / 6</div>
+                    <div id="miner_robot">Miner Robot: 5 / 6</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 1.4 / 0.7%</div>
                     <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails" onclick="switchSelected('planet6')">
-                <div id="planet6" class="planetInfo">
-                    <div class="planetName">planet6</div>
+            <div id="planet6" class="fullPlanetDetails" onclick="switchSelected('planet6')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">planet6</div><img class="editImage hidden" src="img/pencil-square-o.svg"
+                            onclick="editPlanet('planet6', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector sector 3</div>
                         <div>market cap: 5520</div>
@@ -195,17 +261,20 @@
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="miner_robot">Miner Robot: 5/6</div>
-                    <div id="transport_bot">Transport Bot: 4/6</div>
+                    <div id="transport_bot">Transport Bot: 4 / 6</div>
+                    <div id="miner_robot">Miner Robot: 5 / 6</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 1.4 / 0.7%</div>
                     <div id="Mining">Mining: 81.5 / 16.3%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails">
-                <div id="sdf" class="planetInfo">
-                    <div class="planetName">sdf</div>
+            <div id="sdf" class="fullPlanetDetails" onclick="switchSelected('sdf')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">sdf</div><img class="editImage hidden" src="img/pencil-square-o.svg"
+                            onclick="editPlanet('sdf', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector dd</div>
                         <div>market cap: 10272</div>
@@ -214,15 +283,18 @@
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="transport_drone">Transport Drone: 0/96</div>
+                    <div id="transport_drone">Transport Drone: 0 / 96</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 0.0 / 100.0%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails">
-                <div id="sdfsd" class="planetInfo">
-                    <div class="planetName">sdfsd</div>
+            <div id="sdfsd" class="fullPlanetDetails" onclick="switchSelected('sdfsd')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">sdfsd</div><img class="editImage hidden" src="img/pencil-square-o.svg"
+                            onclick="editPlanet('sdfsd', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector ddd</div>
                         <div>market cap: 77856</div>
@@ -231,10 +303,10 @@
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="heavy_duty_transport_bot">Heavy Duty Transport Bot: 0/96</div>
-                    <div id="personal_assistant_robot">Personal Assistant Robot: 0/96</div>
-                    <div id="science_assistant_drone">Science Assistant Drone: 0/48</div>
-                    <div id="transport_bot">Transport Bot: 0/48</div>
+                    <div id="transport_bot">Transport Bot: 0 / 48</div>
+                    <div id="heavy_duty_transport_bot">Heavy Duty Transport Bot: 0 / 96</div>
+                    <div id="personal_assistant_robot">Personal Assistant Robot: 0 / 96</div>
+                    <div id="science_assistant_drone">Science Assistant Drone: 0 / 48</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 0.0 / 7.0%</div>
@@ -242,9 +314,12 @@
                     <div id="Scientific">Scientific: 0.0 / 6.7%</div>
                 </div>
             </div>
-            <div class="fullPlanetDetails">
-                <div id="sds" class="planetInfo">
-                    <div class="planetName">sds</div>
+            <div id="sds" class="fullPlanetDetails" onclick="switchSelected('sds')">
+                <div class="planetInfo">
+                    <div class="planetNameRow">
+                        <div class="planetName">sds</div><img class="editImage hidden" src="img/pencil-square-o.svg"
+                            onclick="editPlanet('sds', event);">
+                    </div>
                     <div class="planetDetails">
                         <div>sector d</div>
                         <div>market cap: 15408</div>
@@ -253,7 +328,7 @@
                     </div>
                 </div>
                 <div class="planetMarket">
-                    <div id="transport_drone">Transport Drone: 0/144</div>
+                    <div id="transport_drone">Transport Drone: 0 / 144</div>
                 </div>
                 <div class="planetCategoryMarket">
                     <div id="Logistics">Logistics: 0.0 / 100.0%</div>
@@ -261,7 +336,7 @@
             </div>
         </div>
 
-        <div id="addPlanetForm" class="addPlanetForm hidden">
+        <div id="addPlanetForm" class="addPlanetForm displayNone">
             <div class="addPlanetFormRow">
                 <label for="planet">Planet:</label>
                 <input type="text" id="addPlanetName">
@@ -393,10 +468,172 @@
             <div class="addPlanetFormRow">
                 <!-- <label></label> -->
                 <button id="addPlanetButton" class="addPlanetFormButton" onclick="onAddPlanet();">Add Planet</button>
-                <button id="savePlanetButton" class="addPlanetFormButton displayNone" onclick="onSavePlanet();">Save Planet</button>
+                <button id="savePlanetButton" class="addPlanetFormButton displayNone" onclick="onSavePlanet();">Save
+                    Planet</button>
                 <!-- <label></label> -->
                 <button class="addPlanetFormButton red" onclick="cancelAddPlanet();">Cancel</button>
-                <button id="deletePlanetButton" class="addPlanetFormButton red" onclick="window.confirmDelete.showModal();" style="margin-left: auto;">Delete</button>
+                <button id="deletePlanetButton" class="addPlanetFormButton red"
+                    onclick="window.confirmDelete.showModal();" style="margin-left: auto;">Delete</button>
+            </div>
+        </div>
+
+        <div id="supplyForm" class="supplyForm displayNone">
+            <div id="supplyTitle" class="supplyFormRow supplyTitle">Planet foo: Edit Supply</div>
+            <div class="supplyFormRow">
+                <!-- <div class="supplyInfo">Total Market: 12345</div> -->
+                <div id="infoMyShare" class="supplyInfo">total share: 55%</div>
+                <div id="infoOppShare" class="supplyInfo">Opponent share (max): 45%</div>
+            </div>
+            <div class="supplyFormRow">
+                <table class="supplyFormCategoryTable">
+                    <thead>
+                        <td></td>
+                        <td>Mine</td>
+                        <td>Opp</td>
+                        <td class="hidden">0000</td>
+                        <td></td>
+                        <td>Mine</td>
+                        <td>Opp</td>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="sf_Logistics">Logistics</td>
+                            <td>0.0%</td>
+                            <td>3.5%</td>
+                            <td class="hidden">0000</td>
+                            <td id="sf_Appliances">Appliances</td>
+                            <td>0.0%</td>
+                            <td>20.6%</td>
+                        </tr>
+                        <tr>
+                            <td>Mining</td>
+                            <td>0.0%</td>
+                            <td>3.5%</td>
+                            <td class="hidden">0000</td>
+                            <td>Agriculture</td>
+                            <td>0.0%</td>
+                            <td>20.6%</td>
+                        </tr>
+                        <tr>
+                            <td>Scientific</td>
+                            <td>0.0%</td>
+                            <td>3.5%</td>
+                            <td class="hidden">0000</td>
+                            <td>Military</td>
+                            <td>0.0%</td>
+                            <td>20.6%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="supplyFormRow">
+                <table class="supplyFormProductTable">
+                    <tr class="hidden">
+                        <td></td>
+                        <td></td>
+                        <td>0000</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>0000</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Transport Bot (&#177;7.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'transport_bot')">-</button></td>
+                        <td id="transport_bot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'transport_bot')">+</button></td>
+                        <td>Maitenance Drone (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'maitenance_drone_amt')">-</button></td>
+                        <td id="maitenance_drone_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'maitenance_drone_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td>Heavy Duty Transport Bot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'heavy_duty_transport_bot_amt')">-</button></td>
+                        <td id="heavy_duty_transport_bot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'heavy_duty_transport_bot_amt')">+</button></td>
+                        <td>Vaccuum Bot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'vaccuum_bot_amt')">-</button></td>
+                        <td id="vaccuum_bot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'vaccuum_bot_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td>Transport Drone (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'transport_drone_amt')">-</button></td>
+                        <td id="transport_drone_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'transport_drone_amt')">+</button></td>
+                        <td>Cleaning Bot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'cleaning_bot_amt')">-</button></td>
+                        <td id="cleaning_bot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'cleaning_bot_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td>Mining Drone (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'mining_drone_amt')">-</button></td>
+                        <td id="mining_drone_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'mining_drone_amt')">+</button></td>
+                        <td>Light Bot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'light_bot_amt')">-</button></td>
+                        <td id="light_bot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'light_bot_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td>Miner Robot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'miner_robot_amt')">-</button></td>
+                        <td id="miner_robot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'miner_robot_amt')">+</button></td>
+                        <td>Screen Bot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'screen_bot_amt')">-</button></td>
+                        <td id="screen_bot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'screen_bot_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td>Planter Drone (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'planter_drone_amt')">-</button></td>
+                        <td id="planter_drone_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'planter_drone_amt')">+</button></td>
+                        <td>Snack Bot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'snack_bot_amt')">-</button></td>
+                        <td id="snack_bot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'snack_bot_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td>Farmer Robot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'farmer_robot_amt')">-</button></td>
+                        <td id="farmer_robot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'farmer_robot_amt')">+</button></td>
+                        <td>Personal Assistant Robot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'personal_assistant_robot_amt')">-</button>
+                        </td>
+                        <td id="personal_assistant_robot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'personal_assistant_robot_amt')">+</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Science Assistant Drone (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'science_assistant_drone_amt')">-</button>
+                        </td>
+                        <td id="science_assistant_drone_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'science_assistant_drone_amt')">+</button>
+                        </td>
+                        <td>Combat Drone (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'combat_drone_amt')">-</button></td>
+                        <td id="combat_drone_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'combat_drone_amt')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td>Science Robot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'science_robot_amt')">-</button></td>
+                        <td id="science_robot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'science_robot_amt')">+</button></td>
+                        <td>Combat Robot (&#177;2.4%)</td>
+                        <td><button onclick="changeSupply('-', 'foo', 'combat_robot_amt')">-</button></td>
+                        <td id="combat_robot_supply">0</td>
+                        <td><button onclick="changeSupply('+', 'foo', 'combat_robot_amt')">+</button></td>
+                    </tr>
+
+                </table>
             </div>
         </div>
 

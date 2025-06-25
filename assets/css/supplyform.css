@@ -1,0 +1,63 @@
+.supplyForm {
+    display: flex;
+    flex-direction: column;
+    width: 41%;
+    margin-right: auto;
+    position: fixed;
+    right: 0px;
+    /* border: 1px solid black; */
+}
+.supplyFormRow {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    padding: 5px;
+    width: 95%;
+    justify-content: space-around;
+}
+
+.supplyTitle {
+    font-size: 18px;
+    font-weight: bold;
+    /* text-align: center; */
+    justify-content: center;
+}
+
+.supplyInfo {
+    font-size: 14px;
+    justify-content: center;
+}
+
+.supplyFormCategoryTable > thead {
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.supplyFormCategoryTable > tbody > tr  {
+    font-size: 13px;
+    text-align: right;
+}
+
+.supplyFormProductTable {
+    font-size: 13px;
+    text-align: right;
+    /* white-space: nowrap; */
+    overflow-wrap: break-word;
+}
+
+.supplyFormProductTable > tbody > tr > td > button {
+    width:20px;
+    height:20px;
+    background:#f2f2f2;
+    border-radius:4px;
+    padding:1px 5px 8px 4px;
+    border:1px solid #ddd;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.supplyFormProductTable > tbody > tr > td[id*="_supply"] {
+    text-align: center;
+}

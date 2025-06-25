@@ -3,7 +3,11 @@
 }
 
 .navMenu {
-    /* position: fixed; */
+    position: fixed;
+    background-color: white;
+    width: 100%;
+    top: 0px;
+    z-index: 10;
 }
 
 .errorText {
@@ -20,7 +24,8 @@
 .toplevel {
     display: flex;
     flex-direction: row;
-    padding-top: 20px;
+    padding-top: 90px;
+    width:82%;
 }
 
 .planetContainer {
@@ -167,3 +172,6 @@
     visibility: visible;
 }
 
+.displayNone {
+    display: none !important;
+}

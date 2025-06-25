@@ -37,6 +37,12 @@ func main() {
 		}
 		return showAddPlanet(args[0].String())
 	}))
+	js.Global().Set("goOnChangeSupply", js.FuncOf(func(this js.Value, args []js.Value) any {
+		if len(args) != 3 {
+			return sendErr("error in changing product supply (wrong # of args)")
+		}
+		return onChangeSupply(args[0].String(), args[1].String(), args[2].String())
+	}))
 
 	<-make(chan struct{})
 }
