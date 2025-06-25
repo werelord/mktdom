@@ -86,7 +86,6 @@ function onSavePlanet() {
 
 function onDeletePlanet() {
     // confirmation handled by dialog
-    console.log("in delete planet")
     if (handleResult(goOnDeletePlanet())) {
         clearAddPlanet()
     }

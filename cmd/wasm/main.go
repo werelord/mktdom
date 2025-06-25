@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"math"
 	"sort"
 	"syscall/js"
 
@@ -256,20 +255,14 @@ func genPlanetCatMarket(doc dom.Document, p planet) dom.Element {
 
 	// for cat, catMarket := range p.marketByCat {
 	for _, cat := range catList {
-		if catMarket, exists := p.marketByCat[cat]; exists {
+		if _, exists := p.marketByCat[cat]; exists {
 
 			catMarketDiv := doc.CreateElement("div")
 			catMarketDiv.SetID(cat.String())
 
-			var (
-				cur = float64(catMarket.current) / float64(p.market.total) * 100
-				opp = (float64(catMarket.total) - float64(catMarket.current)) / float64(p.market.total) * 100
-			)
-
-			cur = math.Round(cur*100) / 100
-			opp = math.Round(opp*100) / 100
-
-			catMarketDiv.SetInnerHTML(fmt.Sprintf("%v: %.1f / %.1f%%", cat.String(), cur, opp))
+			if c, o, err := p.calcCategoryShare(cat); err == nil {
+				catMarketDiv.SetInnerHTML(fmt.Sprintf("%v: %.1f / %.1f%%", cat.String(), c, o))
+			}
 
 			// for highlighting
 			// if catMarket.total > max {

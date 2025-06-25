@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"math"
 	"slices"
 	"strconv"
 	"strings"
@@ -43,6 +45,10 @@ func genPlanetForm(p planet) any {
 		addButton.Class().Add("displayNone")
 		saveButton.Class().Remove("displayNone")
 		deleteButton.Class().Remove("displayNone")
+
+		// save the planet name for delete/save
+		saveButton.SetAttribute("data-planet", p.Name)
+		// saveButton.SetAttribute("onclick", fmt.Sprintf("onSavePlanet('%v');", p.Name))
 	}
 
 	doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).SetValue(p.Name)
@@ -59,16 +65,12 @@ func genPlanetForm(p planet) any {
 	// add spacer row
 	hiddenrow := doc.CreateElement("tr")
 	hiddenrow.Class().SetString("hidden")
-	// save original name, just in case name changes
-	hiddenName := doc.CreateElement("td")
 	spacer1 := doc.CreateElement("td")
 	spacer2 := doc.CreateElement("td")
-	hiddenName.SetID("old_name")
-	hiddenName.SetInnerHTML(p.Name)
 	spacer1.SetInnerHTML("0000")
 	spacer2.SetInnerHTML("0000")
 
-	hiddenrow.AppendChild(hiddenName)
+	hiddenrow.AppendChild(doc.CreateElement("td"))
 	hiddenrow.AppendChild(doc.CreateElement("td"))
 	hiddenrow.AppendChild(spacer1)
 	hiddenrow.AppendChild(doc.CreateElement("td"))
@@ -143,9 +145,11 @@ func onAddPlanet(overwrite bool) any {
 	var newPlanet planet
 	newPlanet.ProductList = make(map[string]productType, 0)
 
-	var oldName = doc.GetElementByID("old_name").InnerHTML()
+	saveButton := doc.GetElementByID("savePlanetButton")
+	var oldName = saveButton.(*dom.HTMLButtonElement).Dataset()["planet"]
+	// fmt.Println("planet : " + oldName)
 	if overwrite && (oldName == "") {
-		return sendErr("Cannot save planet; cannot planet with name %v", oldName)
+		return sendErr("Cannot save planet; cannot find planet with name %v", oldName)
 	}
 
 	if name := doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).Value(); name == "" {
@@ -253,7 +257,7 @@ func onDeletePlanet() any {
 
 	var (
 		doc     = dom.GetWindow().Document()
-		oldName = doc.GetElementByID("old_name").InnerHTML()
+		oldName = doc.GetElementByID("savePlanetButton").(*dom.HTMLButtonElement).Dataset()["planet"]
 	)
 
 	if oldName == "" {
@@ -261,15 +265,19 @@ func onDeletePlanet() any {
 	} else if planet, exists := planetMap[oldName]; !exists {
 		return sendErr("unable to find planet with name %v", oldName)
 	} else {
+		// fmt.Println("delete planet, name = " + oldName)
 		delete(planetMap, oldName)
 
 		if err := savePlanetData(); err != nil {
 			return sendErr("error in saving data: %v", err)
 		}
 		removeFromDisplay(doc, planet)
+		if selected == oldName {
+			selected = ""
+		}
+
 		return sendToast("Successfully deleted planet '%v'", oldName)
 	}
-
 }
 
 func insertIntoDisplay(doc dom.Document, newPlanet planet) any {
@@ -357,4 +365,22 @@ func (p *planet) calcMarketVol() {
 
 	}
 	// fmt.Printf("after planet: %+v\n", *p)
+}
+
+func (p *planet) calcCategoryShare(cat categoryType) (float64, float64, error) {
+
+	if catMarket, exists := p.marketByCat[cat]; !exists {
+		return 0, 0, errors.New("category doesn't exist")
+	} else {
+
+		var (
+			cur = float64(catMarket.current) / float64(p.market.total) * 100
+			opp = (float64(catMarket.total) - float64(catMarket.current)) / float64(p.market.total) * 100
+		)
+
+		cur = math.Round(cur*100) / 100
+		opp = math.Round(opp*100) / 100
+
+		return cur, opp, nil
+	}
 }
