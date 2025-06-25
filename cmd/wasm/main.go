@@ -31,11 +31,11 @@ func main() {
 	js.Global().Set("goOnDeletePlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
 		return onDeletePlanet()
 	}))
-	js.Global().Set("goShowAddPlanet", js.FuncOf(func(this js.Value, args []js.Value) any {
+	js.Global().Set("goGenAddPlanetForm", js.FuncOf(func(this js.Value, args []js.Value) any {
 		if len(args) != 1 {
 			return sendErr("error in showing Add Planet form (wrong # of args)")
 		}
-		return showAddPlanet(args[0].String())
+		return genAddPlanetForm(args[0].String())
 	}))
 	js.Global().Set("goOnChangeSupply", js.FuncOf(func(this js.Value, args []js.Value) any {
 		if len(args) != 3 {
@@ -65,7 +65,7 @@ func loadData() any {
 
 	loadStoredPlanetData()
 	// fmt.Println("skipping loading display")
-	loadPlanetDisplay()
+	loadPlanetListDisplay()
 
 	// return sendErr("testing")
 	return nil
@@ -107,7 +107,7 @@ func savePlanetData() error {
 	}
 }
 
-func loadPlanetDisplay() any {
+func loadPlanetListDisplay() any {
 
 	doc := dom.GetWindow().Document()
 	planetListDiv := doc.GetElementByID("planetList")
@@ -167,11 +167,11 @@ func genPlanetHeader(doc dom.Document) dom.Element {
 
 	market := doc.CreateElement("div")
 	market.Class().SetString("planetMarketHeader")
-	market.SetInnerHTML("Products (my amt / total amt)")
+	market.SetInnerHTML("Products (my/total amount)")
 
 	category := doc.CreateElement("div")
 	category.Class().SetString("planetCategoryMarketHeader")
-	category.SetInnerHTML("Category (my share / opp share %)")
+	category.SetInnerHTML("Category (my/opp share %)")
 
 	headerdiv.AppendChild(info)
 	headerdiv.AppendChild(market)
@@ -302,16 +302,34 @@ func onSelected(newSel string) any {
 	}
 
 	if newSel == prevSel {
-		// same object, its just a deselect
+		// same object, its just a deselect.. make sure supply form is hidden
 		selected = ""
-	} else {
-		var newDiv = doc.GetElementByID(newSel).QuerySelector(".planetInfo")
-		newDiv.Class().Add("selected")
-		newDiv.QuerySelector(".editImage").Class().Remove("hidden")
-		selected = newSel
+
+		supplyForm := doc.GetElementByID("supplyForm")
+		if supplyForm.Class().Contains("displayNone") == false {
+			supplyForm.Class().Add("displayNone")
+		}
+
+		return nil
 	}
 
-	// todo: other stuff?
+	// at this point, we're at a new selection.. load supply info
+	var newDiv = doc.GetElementByID(newSel).QuerySelector(".planetInfo")
+	newDiv.Class().Add("selected")
+	newDiv.QuerySelector(".editImage").Class().Remove("hidden")
+	selected = newSel
+
+	addPlanetForm := doc.GetElementByID("addPlanetForm")
+	if addPlanetForm.Class().Contains("displayNone") == false {
+		addPlanetForm.Class().Add("displayNone")
+	}
+
+	if err := genSupplyForm(doc, newSel); err != nil {
+		return err
+	}
+
+	supplyForm := doc.GetElementByID("supplyForm")
+	supplyForm.Class().Remove("displayNone")
 
 	return nil
 }

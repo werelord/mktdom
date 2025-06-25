@@ -31,7 +31,7 @@
 .planetContainer {
     display: flex;
     flex-direction: column;
-    width: 70%;
+    width: 68%;
     background-color: dodgerblue;
     padding: 3px;
 }
@@ -88,7 +88,7 @@
     width: 20px;
     height: 20px;
     position: absolute;
-    right: 85.5%;
+    right: 87%;
     z-index: 4;
     /* flex-basis: 0; */
     /* padding-right: 0px; */

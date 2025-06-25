@@ -9,7 +9,7 @@ import (
 	"honnef.co/go/js/dom/v2"
 )
 
-func showAddPlanet(planetStr string) any {
+func genAddPlanetForm(planetStr string) any {
 	// fmt.Println("todo: " + planetStr)
 	var pl planet
 

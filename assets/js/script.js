@@ -71,7 +71,7 @@ function onSavePlanet() {
     console.log("in save planet")
     if (handleResult(goOnSavePlanet())) {
         clearAddPlanet()
-        cancelAddPlanet()
+        hideAddPlanet()
     }
 }
 
@@ -84,19 +84,24 @@ function onDeletePlanet() {
 }
 
 function showAddPlanet() {
-    handleResult(goShowAddPlanet(""))
-    f = document.getElementById("addPlanetForm")
-    if (f.classList.contains("displayNone")) {
-        f.classList.remove("displayNone")
+    handleResult(goGenAddPlanetForm(""))
+    supplyForm = document.getElementById("supplyForm")
+    if (supplyForm.classList.contains("displayNone") == false) {
+        supplyForm.classList.add("displayNone")
+    }
+    addForm = document.getElementById("addPlanetForm")
+    if (addForm.classList.contains("displayNone")) {
+        addForm.classList.remove("displayNone")
     }
 }
 
-function cancelAddPlanet() {
-    f = document.getElementById("addPlanetForm")
-
-    // clearAddPlanet()
+function hideAddPlanet() {
+    addForm = document.getElementById("addPlanetForm")
+    if (addForm.classList.contains("displayNone") == false) {
+        addForm.classList.add("displayNone")
+    }
+    clearAddPlanet()
     clearErrTxt()
-    f.classList.add("displayNone")
 }
 
 function clearAddPlanet() {
@@ -109,13 +114,22 @@ function clearAddPlanet() {
 }
 
 function editPlanet(planet, event) {
-    handleResult(goShowAddPlanet(planet))
+    handleResult(goGenAddPlanetForm(planet))
+    hideSupplyForm()
     f = document.getElementById("addPlanetForm")
     if (f.classList.contains("displayNone")) {
         f.classList.remove("displayNone")
     }
     event.stopPropagation()
 }
+
+function hideSupplyForm() {
+    f = document.getElementById("supplyForm")
+    if (f.classList.contains("displayNone") == false) {
+        f.classList.add("displayNone")
+    }
+}
+
 function changeSupply(op, planet, product) {
     handleResult(goOnChangeSupply(op, planet, product))
 }
