@@ -36,11 +36,17 @@ func main() {
 		}
 		return genAddPlanetForm(args[0].String())
 	}))
-	js.Global().Set("goOnChangeSupply", js.FuncOf(func(this js.Value, args []js.Value) any {
-		if len(args) != 3 {
+	js.Global().Set("goOnSubSupply", js.FuncOf(func(this js.Value, args []js.Value) any {
+		if len(args) != 1 {
 			return sendErr("error in changing product supply (wrong # of args)")
 		}
-		return onChangeSupply(args[0].String(), args[1].String(), args[2].String())
+		return onChangeSupply(-48, args[0].String())
+	}))
+	js.Global().Set("goOnAddSupply", js.FuncOf(func(this js.Value, args []js.Value) any {
+		if len(args) != 1 {
+			return sendErr("error in changing product supply (wrong # of args)")
+		}
+		return onChangeSupply(48, args[0].String())
 	}))
 
 	<-make(chan struct{})

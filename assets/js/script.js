@@ -50,12 +50,13 @@ function handleResult(result) {
     if (result != null) {
         errtxt = document.getElementById("errorText")
         if ('error' in result) {
-            console.log("error encocuntered:", result.error)
+            console.error("error encocuntered:", result.error)
             errtxt.innerHTML = result.error
             errtxt.classList.add("show")
             showErrToast(result.error)
         } else if ('toast' in result) {
             // make sure any errors are cleared
+            console.log(result.toast)
             errtxt.classList.remove("show")
             showInfoToast(result.toast)
             return true
@@ -138,6 +139,10 @@ function hideSupplyForm() {
     }
 }
 
-function changeSupply(op, planet, product) {
-    handleResult(goOnChangeSupply(op, planet, product))
+function subSupply(product) {
+    handleResult(goOnSubSupply(product))
+}
+
+function addSupply(product) {
+    handleResult(goOnAddSupply(product))
 }

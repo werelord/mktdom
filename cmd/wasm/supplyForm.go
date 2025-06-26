@@ -7,6 +7,22 @@ import (
 	"honnef.co/go/js/dom/v2"
 )
 
+func (p planet) calcMaxOppShare() (categoryType, float64) {
+	var max struct {
+		cat categoryType
+		marketVolume
+	}
+
+	for cat, mkt := range p.marketByCat {
+		if (mkt.total - mkt.current) > (max.total - max.current) {
+			max.cat = cat
+			max.marketVolume = mkt
+		}
+	}
+
+	return max.cat, float64(max.total-max.current) / float64(p.market.total) * 100.0
+}
+
 func genSupplyForm(doc dom.Document, planetStr string) any {
 
 	var (
@@ -23,27 +39,13 @@ func genSupplyForm(doc dom.Document, planetStr string) any {
 		p = *planet
 	}
 
-	title.SetInnerHTML(fmt.Sprintf("Planet %v: Edit Supply", p.Name))
+	title.SetInnerHTML(fmt.Sprintf("Planet \"%v\": Edit Supply", p.Name))
 	title.SetAttribute("data-planet", p.Name)
 	myShare.SetInnerHTML(fmt.Sprintf("My Share (total): %.2f%%",
 		float32(p.market.current)/float32(p.market.total)*100.0))
 
-	var max struct {
-		cat categoryType
-		marketVolume
-	}
-
-	for cat, mkt := range p.marketByCat {
-		if (mkt.total - mkt.current) > (max.total - max.current) {
-			max.cat = cat
-			max.marketVolume = mkt
-		}
-	}
-
-	oppShare.SetInnerHTML(fmt.Sprintf("Max Opponent Share (%v): %.2f%%",
-		max.cat.String(),
-		float32(max.total-max.current)/float32(p.market.total)*100.0,
-	))
+	cat, share := p.calcMaxOppShare()
+	oppShare.SetInnerHTML(fmt.Sprintf("Max Opponent Share (%v): %.2f%%", cat.String(), share))
 
 	// fmt.Printf("genSupplyForm, %v\n", planetStr)
 
@@ -205,7 +207,7 @@ func genSupplyProductTable(doc dom.Document, p planet) {
 	}
 }
 
-func onChangeSupply(op, planet, product string) any {
+func onChangeSupply(amt int, productStr string) any {
 
 	return sendErr("not yet implemented")
 }

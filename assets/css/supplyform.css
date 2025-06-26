@@ -10,7 +10,7 @@
 .supplyFormRow {
     display: flex;
     flex-direction: row;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     padding: 5px;
     width: 95%;
     justify-content: space-around;
@@ -19,7 +19,6 @@
 .supplyTitle {
     font-size: 18px;
     font-weight: bold;
-    /* text-align: center; */
     justify-content: center;
 }
 
