@@ -45,6 +45,10 @@
     /* border: 1px solid black; */
 }
 
+#supplyFormProductTable > tbody > tr {
+    height: 30px;
+}
+
 #supplyFormProductTable > tbody > tr > td > button {
     width:20px;
     height:20px;

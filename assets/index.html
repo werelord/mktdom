@@ -24,6 +24,7 @@
     <div class="toplevel">
 
         <div id="planetList" class="planetContainer" data-tag="planetList">
+            <!-- 
             <div class="fullPlanetDetails">
                 <div class="planetInfoHeader">Planet Information</div>
                 <div class="planetMarketHeader">Products (my amt / total amt)</div>
@@ -335,6 +336,7 @@
                     <div id="Logistics">Logistics: 0.0 / 100.0%</div>
                 </div>
             </div>
+        -->
         </div>
 
         <div id="addPlanetForm" class="addPlanetForm displayNone">
@@ -358,6 +360,7 @@
             </div> -->
             <div class="addPlanetFormRow">
                 <table id="addPlanetTable">
+                    <!--
                     <tr class="hidden">
                         <td></td>
                         <td></td>
@@ -464,6 +467,7 @@
                         <td class="productAmount" id="combat_robot_amt">0</td>
                         <td><button class="productButton" onclick="addAmount('combat_robot_amt')">+</button></td>
                     </tr>
+                    -->
                 </table>
             </div>
             <div class="addPlanetFormRow">
@@ -478,7 +482,7 @@
             </div>
         </div>
 
-        <div id="supplyForm" class="supplyForm ">
+        <div id="supplyForm" class="supplyForm displayNone">
             <div id="supplyTitle" class="supplyFormRow supplyTitle">Planet foo: Edit Supply</div>
             <div class="supplyFormRow">
                 <!-- <div class="supplyInfo">Total Market: 12345</div> -->
@@ -487,6 +491,7 @@
             </div>
             <div class="supplyFormRow">
                 <table id="supplyFormCategoryTable">
+                    <!--
                     <thead>
                         <td></td>
                         <td>Mine</td>
@@ -525,10 +530,12 @@
                             <td>20.6%</td>
                         </tr>
                     </tbody>
+                -->
                 </table>
             </div>
             <div class="supplyFormRow">
                 <table id="supplyFormProductTable">
+                    <!--
                     <tr class="hidden">
                         <td></td>
                         <td></td>
@@ -633,16 +640,14 @@
                         <td id="combat_robot_supply">0 / 192</td>
                         <td><button onclick="addSupply('combat_robot')">+</button></td>
                     </tr>
-
+                    -->
                 </table>
             </div>
         </div>
 
     </div>
-    <div id="error">
-    </div>
 
-    <script src="wasm_exec.js"></script>
+    <script src="js/wasm_exec.js"></script>
     <script src="js/script.js"></script>
     <script>
         const go = new Go();

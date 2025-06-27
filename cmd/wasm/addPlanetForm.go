@@ -215,11 +215,12 @@ func onAddPlanet(overwrite bool) any {
 	// make sure old planet is deleted if overwrite and names differ
 	if overwrite && (oldName != newPlanet.Name) {
 		delete(planetMap, oldName)
+		deletePlanetData(oldName)
 		if selected == oldName {
 			selected = ""
 		}
 	}
-	if err := savePlanetData(); err != nil {
+	if err := savePlanetData(newPlanet); err != nil {
 		return sendErr("error saving planet data: %v", err)
 	}
 
@@ -265,10 +266,7 @@ func onDeletePlanet() any {
 	} else {
 		// fmt.Println("delete planet, name = " + oldName)
 		delete(planetMap, oldName)
-
-		if err := savePlanetData(); err != nil {
-			return sendErr("error in saving data: %v", err)
-		}
+		deletePlanetData(oldName)
 		removeFromDisplay(doc, planet)
 		if selected == oldName {
 			selected = ""
@@ -327,4 +325,3 @@ func removeFromDisplay(doc dom.Document, remPlanet *planetType) any {
 
 	return nil
 }
-

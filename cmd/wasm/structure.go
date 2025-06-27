@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -184,7 +183,7 @@ func (p *planetType) calcMarketVol() {
 }
 
 func (p planetType) calcTotalShare() float64 {
-	return float64(p.market.current)/float64(p.market.total)*100.0
+	return float64(p.market.current) / float64(p.market.total) * 100.0
 }
 
 func (p planetType) calcMaxOppShare() (categoryType, float64) {
@@ -209,13 +208,13 @@ func (p *planetType) calcCategoryShare(cat categoryType) (float64, float64, erro
 		return 0, 0, errors.New("category doesn't exist")
 	} else {
 
-		fmt.Printf("cat:%v, tot:%v\n", catMarket, p.market)
+		// fmt.Printf("cat:%v, tot:%v\n", catMarket, p.market)
 		var (
 			cur = float64(catMarket.current) / float64(p.market.total) * 100
 			opp = (float64(catMarket.total) - float64(catMarket.current)) / float64(p.market.total) * 100
 		)
 
-		fmt.Printf("%v / %v\n", cur, opp)
+		// fmt.Printf("%v / %v\n", cur, opp)
 
 		// cur = math.Round(cur*100) / 100
 		// opp = math.Round(opp*100) / 100

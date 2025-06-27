@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"sort"
 	"syscall/js"
@@ -66,50 +67,83 @@ func sendToast(t string, val ...any) map[string]any {
 }
 
 func loadData() any {
-	// todo: populate
+	if err := loadStoredPlanetData(); err != nil {
+		return sendErr("error: %v", err)
+	}
 
-	loadStoredPlanetData()
-	// fmt.Println("skipping loading display")
 	loadPlanetListDisplay()
-
-	// return sendErr("testing")
 	return nil
 }
 
-func loadStoredPlanetData() {
+func loadStoredPlanetData() error {
 
-	if obj := js.Global().Get("localStorage").Call("getItem", "planetMap"); obj.IsNull() {
-		// todo: nothing in storage; load example data??
-	} else {
-		// fmt.Printf("load successful, json: %v\n", obj.String())
-		if err := json.Unmarshal([]byte(obj.String()), &planetMap); err != nil {
-			fmt.Printf("error unmarshalling: %v\n", err)
+	var (
+		localstorage = js.Global().Get("localStorage")
+		joinErr      error
+	)
+	// fmt.Printf("localstorage length = %v\n", localstorage.Length())
+	planetMap = make(map[string]*planetType, localstorage.Length())
+	for i := 0; i < localstorage.Length(); i++ {
+		var (
+			key    = localstorage.Call("key", i).String()
+			planet planetType
+		)
+
+		if obj := localstorage.Call("getItem", key); obj.IsNull() {
+			joinErr = errors.Join(joinErr, fmt.Errorf("load error: object is null: '%v'", key))
+		} else if err := json.Unmarshal([]byte(obj.String()), &planet); err != nil {
+			joinErr = errors.Join(joinErr, fmt.Errorf("error unmarshalling: %v\n", err))
 		} else {
-			// fmt.Printf("unmarshal successful: %+v\n", planetMap)
-			// set the base internal (non-exported) values
-			for _, planet := range planetMap {
-				for pname, prod := range planet.ProductList {
-					prod.productTypeInternal = baseProductMap[pname].productTypeInternal
-					planet.ProductList[pname] = prod
-				}
-				planet.calcMarketVol()
+			for name, prod := range planet.ProductList {
+				// make sure base are inserted back
+				prod.productTypeInternal = baseProductMap[name].productTypeInternal
+				planet.ProductList[name] = prod
 			}
+			planet.calcMarketVol()
+			// fmt.Printf("loaded planet '%v'\n", planet)
+			planetMap[planet.Name] = &planet
 		}
 	}
+	return joinErr
 }
 
-func savePlanetData() error {
+// func saveAllPlanetData() error {
+// 	fmt.Println("in savePlanetData")
+
+// 	var localstorage = js.Global().Get("localStorage")
+
+// 	for _, planet := range planetMap {
+// 		if str, err := json.Marshal(*planet); err != nil {
+// 			return err
+// 		} else {
+// 			// fmt.Printf("%v\n", string(str))
+// 			localstorage.Call("setItem", planet.Name, string(str))
+// 		}
+// 	}
+
+// 	fmt.Println("savePlanetData successful")
+// 	return nil
+// }
+
+func savePlanetData(planet planetType) error {
 	fmt.Println("in savePlanetData")
-	str, err := json.Marshal(planetMap)
-	if err != nil {
-		fmt.Printf("error :%v\n", err)
+	var localstorage = js.Global().Get("localStorage")
+	if str, err := json.Marshal(planet); err != nil {
 		return err
 	} else {
-		// fmt.Printf("json: %v\n", string(str))
-		js.Global().Get("localStorage").Call("setItem", "planetMap", string(str))
-		fmt.Println("savePlanetData successful")
-		return nil
+		fmt.Printf("%v\n", string(str))
+		localstorage.Call("setItem", planet.Name, string(str))
 	}
+
+	return nil
+}
+
+func deletePlanetData(name string) {
+	fmt.Println("in delete planet")
+
+	var localstorage = js.Global().Get("localStorage")
+	localstorage.Call("removeItem", name)
+
 }
 
 func loadPlanetListDisplay() any {

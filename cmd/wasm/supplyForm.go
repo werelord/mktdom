@@ -116,7 +116,7 @@ func genSupplyCategoryTable(doc dom.Document, p planetType) {
 }
 
 func genSupplyProductTable(doc dom.Document, p planetType) {
-	fmt.Printf("genSupplyProdTable: %v\n", p.Name)
+	// fmt.Printf("genSupplyProdTable: %v\n", p.Name)
 
 	var prodTable = doc.GetElementByID("supplyFormProductTable")
 
@@ -229,9 +229,9 @@ func onChangeSupply(amt int, productStr string) any {
 		newAmt = product.Demand
 	}
 
-	fmt.Printf("before, %v:%v:%v:%v:%v\n", planet.Name, product.name,
-		planet.market, planet.marketByCat[product.category], planet.ProductList[productStr],
-	)
+	// fmt.Printf("before, %v:%v:%v:%v:%v\n", planet.Name, product.name,
+	// 	planet.market, planet.marketByCat[product.category], planet.ProductList[productStr],
+	// )
 
 	product.Supply = newAmt
 	planet.ProductList[product.ID()] = product
@@ -244,9 +244,9 @@ func onChangeSupply(amt int, productStr string) any {
 	mktByCat.current += newCurrent
 	planet.marketByCat[product.category] = mktByCat // not stored by reference
 
-	fmt.Printf("after, %v:%v:%v:%v:%v\n", planet.Name, product.name,
-		planet.market, planet.marketByCat[product.category], planet.ProductList[product.ID()],
-	)
+	// fmt.Printf("after, %v:%v:%v:%v:%v\n", planet.Name, product.name,
+	// 	planet.market, planet.marketByCat[product.category], planet.ProductList[product.ID()],
+	// )
 
 	updatePlanetInfo(doc, *planet)
 	updateProductMarket(doc, *planet, product)
