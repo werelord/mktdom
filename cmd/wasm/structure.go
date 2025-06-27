@@ -1,6 +1,10 @@
 package main
 
-import "strings"
+import (
+	"errors"
+	"fmt"
+	"strings"
+)
 
 type categoryType int
 
@@ -112,7 +116,7 @@ type marketVolume struct {
 	// share   float32
 }
 
-type planet struct {
+type planetType struct {
 	Name        string
 	Sector      string
 	DomPoints   int
@@ -137,7 +141,85 @@ type planet struct {
 // }
 
 var (
-	planetMap     = make(map[string]*planet, 0)
-	planetDisplay []*planet
+	planetMap     = make(map[string]*planetType, 0)
+	planetDisplay []*planetType
 	selected      string
 )
+
+func (p *planetType) calcMarketVol() {
+	// fmt.Printf("before planet: %+v\n", *p)
+	// zero out before calc, just in case this is called elsewhere
+	p.market.current = 0
+	p.market.total = 0
+	// p.market.share = 0.0
+	p.marketByCat = make(map[categoryType]marketVolume, 0)
+
+	var (
+		totVol int
+		curVol int
+	)
+
+	for _, prod := range p.ProductList {
+		curVol = (prod.Supply * prod.price)
+		totVol = (prod.Demand * prod.price)
+
+		p.market.current += curVol
+		p.market.total += totVol
+
+		var (
+			mkt    marketVolume
+			exists bool
+		)
+
+		if mkt, exists = p.marketByCat[prod.category]; exists == false {
+			mkt = marketVolume{}
+			// p.marketByCat[prod.category] = mkt
+		}
+		mkt.current += curVol
+		mkt.total += totVol
+		p.marketByCat[prod.category] = mkt
+
+	}
+	// fmt.Printf("after planet: %+v\n", *p)
+}
+
+func (p planetType) calcTotalShare() float64 {
+	return float64(p.market.current)/float64(p.market.total)*100.0
+}
+
+func (p planetType) calcMaxOppShare() (categoryType, float64) {
+	var max struct {
+		cat categoryType
+		marketVolume
+	}
+
+	for cat, mkt := range p.marketByCat {
+		if (mkt.total - mkt.current) > (max.total - max.current) {
+			max.cat = cat
+			max.marketVolume = mkt
+		}
+	}
+
+	return max.cat, float64(max.total-max.current) / float64(p.market.total) * 100.0
+}
+
+func (p *planetType) calcCategoryShare(cat categoryType) (float64, float64, error) {
+
+	if catMarket, exists := p.marketByCat[cat]; !exists {
+		return 0, 0, errors.New("category doesn't exist")
+	} else {
+
+		fmt.Printf("cat:%v, tot:%v\n", catMarket, p.market)
+		var (
+			cur = float64(catMarket.current) / float64(p.market.total) * 100
+			opp = (float64(catMarket.total) - float64(catMarket.current)) / float64(p.market.total) * 100
+		)
+
+		fmt.Printf("%v / %v\n", cur, opp)
+
+		// cur = math.Round(cur*100) / 100
+		// opp = math.Round(opp*100) / 100
+
+		return cur, opp, nil
+	}
+}

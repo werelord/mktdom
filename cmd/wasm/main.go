@@ -124,7 +124,7 @@ func loadPlanetListDisplay() any {
 
 	planetListDiv.AppendChild(genPlanetHeader(doc))
 
-	planetDisplay = make([]*planet, 0, len(planetMap))
+	planetDisplay = make([]*planetType, 0, len(planetMap))
 	for _, p := range planetMap {
 		// fmt.Println("formap:" + p.Name)
 		planetDisplay = append(planetDisplay, p)
@@ -142,7 +142,7 @@ func loadPlanetListDisplay() any {
 	return nil
 }
 
-func generatePlanetDisplay(p planet) dom.Element {
+func generatePlanetDisplay(p planetType) dom.Element {
 
 	doc := dom.GetWindow().Document()
 
@@ -185,7 +185,7 @@ func genPlanetHeader(doc dom.Document) dom.Element {
 	return headerdiv
 }
 
-func genPlanetInfo(doc dom.Document, p planet) dom.Element {
+func genPlanetInfo(doc dom.Document, p planetType) dom.Element {
 
 	planetWrapperDiv := doc.CreateElement("div")
 	// planetWrapperDiv.SetID(p.Name)
@@ -229,7 +229,7 @@ func genPlanetInfo(doc dom.Document, p planet) dom.Element {
 	return planetWrapperDiv
 }
 
-func genPlanetMarket(doc dom.Document, p planet) dom.Element {
+func genPlanetMarket(doc dom.Document, p planetType) dom.Element {
 
 	marketDiv := doc.CreateElement("div")
 	marketDiv.Class().SetString("planetMarket")
@@ -251,7 +251,7 @@ func genPlanetMarket(doc dom.Document, p planet) dom.Element {
 
 }
 
-func genPlanetCatMarket(doc dom.Document, p planet) dom.Element {
+func genPlanetCatMarket(doc dom.Document, p planetType) dom.Element {
 	categoryDiv := doc.CreateElement("div")
 	categoryDiv.Class().SetString("planetCategoryMarket")
 	// var (

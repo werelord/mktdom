@@ -7,26 +7,10 @@ import (
 	"honnef.co/go/js/dom/v2"
 )
 
-func (p planet) calcMaxOppShare() (categoryType, float64) {
-	var max struct {
-		cat categoryType
-		marketVolume
-	}
-
-	for cat, mkt := range p.marketByCat {
-		if (mkt.total - mkt.current) > (max.total - max.current) {
-			max.cat = cat
-			max.marketVolume = mkt
-		}
-	}
-
-	return max.cat, float64(max.total-max.current) / float64(p.market.total) * 100.0
-}
-
 func genSupplyForm(doc dom.Document, planetStr string) any {
 
 	var (
-		p        planet
+		p        planetType
 		title    = doc.GetElementByID("supplyTitle")
 		myShare  = doc.GetElementByID("infoMyShare")
 		oppShare = doc.GetElementByID("infoOppShare")
@@ -61,7 +45,7 @@ func genSupplyForm(doc dom.Document, planetStr string) any {
 	// return sendErr("not yet implemented")
 }
 
-func genSupplyCategoryTable(doc dom.Document, p planet) {
+func genSupplyCategoryTable(doc dom.Document, p planetType) {
 
 	// fmt.Printf("genSupplyCategoryTalble: %v\n", p.Name)
 
@@ -132,7 +116,7 @@ func genSupplyCategoryTable(doc dom.Document, p planet) {
 	// return nil
 }
 
-func genSupplyProductTable(doc dom.Document, p planet) {
+func genSupplyProductTable(doc dom.Document, p planetType) {
 	fmt.Printf("genSupplyProdTable: %v\n", p.Name)
 
 	var prodTable = doc.GetElementByID("supplyFormProductTable")

@@ -1,9 +1,7 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"math"
 	"slices"
 	"strconv"
 	"strings"
@@ -13,7 +11,7 @@ import (
 
 func genAddPlanetForm(planetStr string) any {
 	// fmt.Println("todo: " + planetStr)
-	var pl planet
+	var pl planetType
 
 	if planetStr != "" {
 		// load planet for editing
@@ -27,7 +25,7 @@ func genAddPlanetForm(planetStr string) any {
 	return genPlanetForm(pl)
 }
 
-func genPlanetForm(p planet) any {
+func genPlanetForm(p planetType) any {
 	// fmt.Println("in genPlanetForm():", p)
 
 	doc := dom.GetWindow().Document()
@@ -81,7 +79,7 @@ func genPlanetForm(p planet) any {
 
 	table.AppendChild(hiddenrow)
 
-	var genProdTd = func(root dom.Element, p planet, prod productType) {
+	var genProdTd = func(root dom.Element, p planetType, prod productType) {
 		// var tdlist = make([]dom.Element, 0)
 
 		label := doc.CreateElement("td")
@@ -142,7 +140,7 @@ func onAddPlanet(overwrite bool) any {
 	// Add or Edit depends on overwrite
 
 	doc := dom.GetWindow().Document()
-	var newPlanet planet
+	var newPlanet planetType
 	newPlanet.ProductList = make(map[string]productType, 0)
 
 	saveButton := doc.GetElementByID("savePlanetButton")
@@ -230,7 +228,7 @@ func onAddPlanet(overwrite bool) any {
 		if not overwrite, just insert
 	*/
 	if overwrite {
-		if err := removeFromDisplay(doc, &planet{Name: oldName}); err != nil {
+		if err := removeFromDisplay(doc, &planetType{Name: oldName}); err != nil {
 			return err
 		}
 	}
@@ -280,9 +278,9 @@ func onDeletePlanet() any {
 	}
 }
 
-func insertIntoDisplay(doc dom.Document, newPlanet planet) any {
+func insertIntoDisplay(doc dom.Document, newPlanet planetType) any {
 	// do an insert, assuming sorted by name for now
-	i, found := slices.BinarySearchFunc(planetDisplay, &newPlanet, func(a, b *planet) int {
+	i, found := slices.BinarySearchFunc(planetDisplay, &newPlanet, func(a, b *planetType) int {
 		return strings.Compare(strings.ToLower(a.Name), strings.ToLower(b.Name))
 	})
 	if found {
@@ -312,8 +310,8 @@ func insertIntoDisplay(doc dom.Document, newPlanet planet) any {
 	return nil
 }
 
-func removeFromDisplay(doc dom.Document, remPlanet *planet) any {
-	if i, found := slices.BinarySearchFunc(planetDisplay, remPlanet, func(a, b *planet) int {
+func removeFromDisplay(doc dom.Document, remPlanet *planetType) any {
+	if i, found := slices.BinarySearchFunc(planetDisplay, remPlanet, func(a, b *planetType) int {
 		return strings.Compare(strings.ToLower(a.Name), strings.ToLower(b.Name))
 	}); !found {
 		return sendErr("unable to remove planet div '%v'; cannot find div!", remPlanet.Name)
@@ -330,57 +328,3 @@ func removeFromDisplay(doc dom.Document, remPlanet *planet) any {
 	return nil
 }
 
-func (p *planet) calcMarketVol() {
-	// fmt.Printf("before planet: %+v\n", *p)
-	// zero out before calc, just in case this is called elsewhere
-	p.market.current = 0
-	p.market.total = 0
-	// p.market.share = 0.0
-	p.marketByCat = make(map[categoryType]marketVolume, 0)
-
-	var (
-		totVol int
-		curVol int
-	)
-
-	for _, prod := range p.ProductList {
-		curVol = (prod.Supply * prod.price)
-		totVol = (prod.Demand * prod.price)
-
-		p.market.current += curVol
-		p.market.total += totVol
-
-		var (
-			mkt    marketVolume
-			exists bool
-		)
-
-		if mkt, exists = p.marketByCat[prod.category]; exists == false {
-			mkt = marketVolume{}
-			// p.marketByCat[prod.category] = mkt
-		}
-		mkt.current += curVol
-		mkt.total += totVol
-		p.marketByCat[prod.category] = mkt
-
-	}
-	// fmt.Printf("after planet: %+v\n", *p)
-}
-
-func (p *planet) calcCategoryShare(cat categoryType) (float64, float64, error) {
-
-	if catMarket, exists := p.marketByCat[cat]; !exists {
-		return 0, 0, errors.New("category doesn't exist")
-	} else {
-
-		var (
-			cur = float64(catMarket.current) / float64(p.market.total) * 100
-			opp = (float64(catMarket.total) - float64(catMarket.current)) / float64(p.market.total) * 100
-		)
-
-		cur = math.Round(cur*100) / 100
-		opp = math.Round(opp*100) / 100
-
-		return cur, opp, nil
-	}
-}
