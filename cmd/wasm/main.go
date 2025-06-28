@@ -104,6 +104,16 @@ func loadStoredPlanetData() error {
 			planetMap[planet.Name] = &planet
 		}
 	}
+
+	// temporary
+	// for _, planet := range planetMap {
+	// 	deletePlanetData(planet.Name)
+
+	// 	planet.Name = strings.Title(planet.Name)
+	// 	planet.Sector = strings.ToUpper(planet.Sector)
+
+	// 	savePlanetData(*planet)
+	// }
 	return joinErr
 }
 
@@ -131,7 +141,7 @@ func savePlanetData(planet planetType) error {
 	if str, err := json.Marshal(planet); err != nil {
 		return err
 	} else {
-		fmt.Printf("%v\n", string(str))
+		// fmt.Printf("%v\n", string(str))
 		localstorage.Call("setItem", planet.Name, string(str))
 	}
 

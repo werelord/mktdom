@@ -117,9 +117,10 @@ function clearAddPlanet() {
     // no reason to call into go for this
     f = document.getElementById("addPlanetForm")
 
-    document.getElementById("addPlanetName").value = ""
-    document.getElementById("addPlanetSector").value = ""
-    document.getElementById("addPlanetPoints").value = ""
+    handleResult(goGenAddPlanetForm(""))
+    // document.getElementById("addPlanetName").value = ""
+    // document.getElementById("addPlanetSector").value = ""
+    // document.getElementById("addPlanetPoints").value = ""
 }
 
 function editPlanet(planet, event) {

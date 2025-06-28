@@ -253,6 +253,10 @@ func onChangeSupply(amt int, productStr string) any {
 	updateCategoryMarket(doc, *planet, product.category)
 	updateSupplyForm(doc, *planet, product)
 
+	if err := savePlanetData(*planet); err != nil {
+		sendErr("err in saving planet: %v", err)
+	}
+
 	return nil
 }
 

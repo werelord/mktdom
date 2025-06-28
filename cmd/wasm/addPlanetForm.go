@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"honnef.co/go/js/dom/v2"
+
 )
 
 func genAddPlanetForm(planetStr string) any {
@@ -166,14 +167,14 @@ func onAddPlanet(overwrite bool) any {
 				return sendErr("Add Planet: planet with name '%v' already exists", name)
 			}
 		}
-		newPlanet.Name = name
+		newPlanet.Name = strings.Title(name)
 	}
 
 	if sector := doc.GetElementByID("addPlanetSector").(*dom.HTMLInputElement).Value(); sector == "" {
 		// not warning about blank sector
 	} else {
 		// fmt.Println("sector: " + sector)
-		newPlanet.Sector = sector
+		newPlanet.Sector = strings.ToUpper(sector)
 	}
 
 	if domPts := doc.GetElementByID("addPlanetPoints").(*dom.HTMLInputElement).Value(); domPts == "" {
