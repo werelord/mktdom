@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"slices"
 	"strconv"
 	"strings"
 
 	"honnef.co/go/js/dom/v2"
-
 )
 
 func genAddPlanetForm(planetStr string) any {
@@ -26,7 +26,7 @@ func genAddPlanetForm(planetStr string) any {
 	return genPlanetForm(pl)
 }
 
-func genPlanetForm(p planetType) any {
+func genPlanetForm(planet planetType) any {
 	// fmt.Println("in genPlanetForm():", p)
 
 	doc := dom.GetWindow().Document()
@@ -36,7 +36,7 @@ func genPlanetForm(p planetType) any {
 	addButton := doc.GetElementByID("addPlanetButton")
 	saveButton := doc.GetElementByID("savePlanetButton")
 	deleteButton := doc.GetElementByID("deletePlanetButton")
-	if p.Name == "" {
+	if planet.Name == "" {
 		addButton.Class().Remove("displayNone")
 		saveButton.Class().Add("displayNone")
 		deleteButton.Class().Add("displayNone")
@@ -46,91 +46,30 @@ func genPlanetForm(p planetType) any {
 		deleteButton.Class().Remove("displayNone")
 
 		// save the planet name for delete/save
-		saveButton.SetAttribute("data-planet", p.Name)
+		saveButton.SetAttribute("data-planet", planet.Name)
 		// saveButton.SetAttribute("onclick", fmt.Sprintf("onSavePlanet('%v');", p.Name))
 	}
 
-	doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).SetValue(p.Name)
-	doc.GetElementByID("addPlanetSector").(*dom.HTMLInputElement).SetValue(p.Sector)
-	doc.GetElementByID("addPlanetPoints").(*dom.HTMLInputElement).SetValue(fmt.Sprintf("%v", p.DomPoints))
+	doc.GetElementByID("addPlanetName").(*dom.HTMLInputElement).SetValue(planet.Name)
+	doc.GetElementByID("addPlanetSector").(*dom.HTMLInputElement).SetValue(planet.Sector)
+	doc.GetElementByID("addPlanetPoints").(*dom.HTMLInputElement).SetValue(fmt.Sprintf("%v", planet.DomPoints))
 
 	table := doc.GetElementByID("addPlanetTable")
+	elemList := table.QuerySelectorAll(".productAmount")
 
-	// reset everything
-	for _, child := range table.ChildNodes() {
-		table.RemoveChild(child)
-	}
+	// fmt.Println("here")
+	for _, elem := range elemList {
+		var (
+			prodName = strings.TrimSuffix(elem.ID(), "_amt")
+			prodAmt  int
+		)
+		if prod, exists := planet.ProductList[prodName]; exists {
+			prodAmt = prod.Demand
+		} // otherwise zero
 
-	// add spacer row
-	hiddenrow := doc.CreateElement("tr")
-	hiddenrow.Class().SetString("hidden")
-	spacer1 := doc.CreateElement("td")
-	spacer2 := doc.CreateElement("td")
-	spacer1.SetInnerHTML("0000")
-	spacer2.SetInnerHTML("0000")
+		// fmt.Printf("%v:%v\n", prodName, prodAmt)
+		elem.(*dom.HTMLInputElement).SetValue(fmt.Sprintf("%v", prodAmt))
 
-	hiddenrow.AppendChild(doc.CreateElement("td"))
-	hiddenrow.AppendChild(doc.CreateElement("td"))
-	hiddenrow.AppendChild(spacer1)
-	hiddenrow.AppendChild(doc.CreateElement("td"))
-	hiddenrow.AppendChild(doc.CreateElement("td"))
-	hiddenrow.AppendChild(doc.CreateElement("td"))
-	hiddenrow.AppendChild(spacer2)
-	hiddenrow.AppendChild(doc.CreateElement("td"))
-
-	table.AppendChild(hiddenrow)
-
-	var genProdTd = func(root dom.Element, p planetType, prod productType) {
-		// var tdlist = make([]dom.Element, 0)
-
-		label := doc.CreateElement("td")
-		label.Class().SetString("productLabel")
-		// label.SetAttribute("id", fmt.Sprintf("%v", spToUl(p.ID())))
-		// fmt.Println("in genPlanetForm, " + p.name)
-		label.SetInnerHTML(prod.name)
-		root.AppendChild(label)
-
-		mbntd := doc.CreateElement("td")
-		minus := doc.CreateElement("button")
-		minus.Class().SetString("productButton")
-		minus.SetAttribute("onclick", fmt.Sprintf("subAmount('%v_amt')", prod.ID()))
-		minus.SetInnerHTML("-")
-		mbntd.AppendChild(minus)
-		root.AppendChild(mbntd)
-
-		amt := doc.CreateElement("td")
-		amt.Class().SetString("productAmount")
-		amt.SetID(fmt.Sprintf("%v_amt", prod.ID()))
-		var prodAmt int
-
-		// fmt.Printf("planet %v, product %v\n", p, prod.ID())
-		if existingProd, exists := p.ProductList[prod.ID()]; exists {
-			// fmt.Printf("exists!! %v\n", existingProd)
-			prodAmt = existingProd.Demand
-		}
-		amt.SetInnerHTML(fmt.Sprintf("%v", prodAmt))
-		root.AppendChild(amt)
-
-		pbntd := doc.CreateElement("td")
-		plus := doc.CreateElement("button")
-		plus.Class().SetString("productButton")
-		plus.SetAttribute("onclick", fmt.Sprintf("addAmount('%v_amt')", prod.ID()))
-		plus.SetInnerHTML("+")
-		pbntd.AppendChild(plus)
-		root.AppendChild(pbntd)
-	}
-
-	for i := 0; i < len(productList); i = i + 2 {
-		var p1, p2 = baseProductMap[productList[i]], baseProductMap[productList[i+1]]
-
-		row := doc.CreateElement("tr")
-
-		genProdTd(row, p, p1)
-		genProdTd(row, p, p2)
-
-		// plus := doc.CreateElement("button")
-
-		table.AppendChild(row)
 	}
 
 	return nil
@@ -188,20 +127,21 @@ func onAddPlanet(overwrite bool) any {
 	}
 
 	for prdId, prod := range baseProductMap {
-		if amt := doc.GetElementByID(fmt.Sprintf("%v_amt", prdId)).InnerHTML(); amt == "" {
+		if amt := doc.GetElementByID(fmt.Sprintf("%v_amt", prdId)).(*dom.HTMLInputElement).Value(); amt == "" {
 			// skip
 		} else if val, err := strconv.Atoi(amt); err != nil {
 			return sendErr("Add planet: " + err.Error())
 		} else if val <= 0 {
 			// zero, skip
 		} else {
+			// force value to be multiple of 48, just in case javascript fails
+			if (val % 48) != 0 {
+				val = int(math.Round(float64(val)/48.0) * 48)
+			}
+
 			fmt.Printf("prod: %v amt: %v\n", prdId, val)
 			prod.Demand = val
 			newPlanet.ProductList[prdId] = prod
-
-			// vol := prod.price * prod.Demand
-			// planet.currentMarketVol += vol
-			// planet.currentMarketVolByCat[prod.category] += vol
 		}
 	}
 

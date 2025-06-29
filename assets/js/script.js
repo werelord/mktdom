@@ -17,33 +17,39 @@ function showErrToast(msg) {
 
 function addAmount(el) {
     var e = document.getElementById(el)
-    e.innerHTML = +e.innerHTML + 48
+    e.value = +e.value + 48
 }
 
 function subAmount(el) {
     var e = document.getElementById(el)
-    var amt = +e.innerHTML - 48
+    var amt = +e.value - 48
     if (amt < 0) {
         amt = 0
     }
-    e.innerHTML = amt
+    e.value = amt
+}
+
+const table = document.getElementById("addPlanetTable")
+const elemList = document.querySelectorAll(".productAmount")
+elemList.forEach((inputItem) => {
+    inputItem.onkeyup = function(e) { if (e.which == 13) this.blur(); };
+    inputItem.onfocus = function() {
+        this.select();
+    }
+    inputItem.addEventListener("focusout", function () {
+        roundAmount(this);
+    })
+});
+
+function roundAmount(elem) {
+    // console.log(+elem.value)
+    amt = Math.round(+elem.value / 48) * 48
+    // console.log("new amt: " + amt)
+    elem.value = amt
 }
 
 function switchSelected(el) {
     handleResult(goOnSelected(el))
-    // if (el.classList.contains("selected")) {
-    //     el.classList.remove('selected')
-    // } else {
-    //     Array.prototype.slice.call(document.querySelectorAll('div[data-tag="planetList"] div')).forEach(function (element) {
-    //         // remove the selected clas
-    //         element.classList.remove('selected');
-    //     });
-    //     // add the selected class to the element that was clicked
-    //     el.classList.add('selected');
-    // }
-
-    // todo: update subsequent divs
-
 }
 
 function handleResult(result) {
